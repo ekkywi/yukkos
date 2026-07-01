@@ -1,0 +1,69 @@
+# =========================================
+# DEPENDENCIES
+# =========================================
+node_modules/
+.pnp
+.pnp.js
+
+# =========================================
+# BUILD OUTPUT (NestJS & React/Vite)
+# =========================================
+dist/
+dist-ssr/
+build/
+out/
+.next/
+.nuxt/
+*.tsbuildinfo
+
+# =========================================
+# ENVIRONMENT VARIABLES
+# =========================================
+# Penting: Jangan pernah men-commit file .env ke repository
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
+
+# =========================================
+# LOGS
+# =========================================
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# =========================================
+# TESTING & COVERAGE
+# =========================================
+coverage/
+.nyc_output/
+
+# =========================================
+# OS GENERATED FILES
+# =========================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# =========================================
+# IDE & EDITORS
+# =========================================
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

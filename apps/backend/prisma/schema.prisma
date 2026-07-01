@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum StatusListing {
+  AVAILABLE
+  FEW_LEFT
+  FULL
+}
+
+model Listing {
+  id            String             @id @default(uuid())
+  name          String
+  city          String
+  fullAddress   String             @db.Text
+  monthlyPrice  Int
+  description   String             @db.Text
+  status        StatusListing      @default(AVAILABLE)
+  facilities    ListingFacility[]
+
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+
+  @@map("listings")
+}
+
+model Facility {
+  id          Int                @id @default(autoincrement())
+  name        String             @unique
+  listings    ListingFacility[]
+
+  @@map("facilities")
+}
+
+model ListingFacility {
+  listingId   String
+  facilityId  Int
+  
+  listing     Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  facility    Facility @relation(fields: [facilityId], references: [id], onDelete: Cascade)
+
+  @@id([listingId, facilityId])
+  @@map("listing_facilities")
+}
