@@ -6,10 +6,28 @@ datasource db {
   provider = "postgresql"
 }
 
+enum Role {
+  TENANT
+  PROVIDER
+  ADMIN
+}
+
 enum StatusListing {
   AVAILABLE
   FEW_LEFT
   FULL
+}
+
+model User {
+  id          String      @id @default(uuid())
+  email       String      @unique
+  password    String
+  name        String
+  role        Role        @default(TENANT)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  listings Listing[]
 }
 
 model Listing {
@@ -24,6 +42,9 @@ model Listing {
 
   createdAt     DateTime           @default(now())
   updatedAt     DateTime           @updatedAt
+
+  providerId    String
+  provider      User               @relation(fields: [providerId], references: [id], onDelete: Cascade)
 
   @@map("listings")
 }

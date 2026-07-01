@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { UserNodule } from './user/user.module';
 import { MobileListingController } from './infrastructure/controllers/mobile-listing.controller';
 import { WebListingController } from './infrastructure/controllers/web-listing.controller';
 import { PrismaService } from './infrastructure/database/prisma.service';
@@ -8,7 +9,7 @@ import { GetMobileListingsUseCase } from './application/listing/use-cases/get-mo
 import { GetWebListingDetailUseCase } from './application/listing/use-cases/get-web-listing-detail.usecase';
 
 @Module({
-  imports: [],
+  imports: [UserNodule],
   controllers: [
     MobileListingController,
     WebListingController
