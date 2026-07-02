@@ -1,27 +1,11 @@
 import { Module } from '@nestjs/common';
-import { UserNodule } from './user/user.module';
-import { MobileListingController } from './infrastructure/controllers/mobile-listing.controller';
-import { WebListingController } from './infrastructure/controllers/web-listing.controller';
-import { PrismaService } from './infrastructure/database/prisma.service';
-import { PrismaListingRepository } from './infrastructure/database/prisma-listing.repository';
-import { LISTING_REPOSITORY } from './domain/listing/listing.repository.interface';
-import { GetMobileListingsUseCase } from './application/listing/use-cases/get-mobile-listings.usecase';
-import { GetWebListingDetailUseCase } from './application/listing/use-cases/get-web-listing-detail.usecase';
+import { AuthModule } from './infrastructure/modules/auth.module';
 
 @Module({
-  imports: [UserNodule],
-  controllers: [
-    MobileListingController,
-    WebListingController
+  imports: [
+    AuthModule, 
   ],
-  providers: [
-    PrismaService,
-    {
-      provide: LISTING_REPOSITORY,
-      useClass: PrismaListingRepository,
-    },
-    GetMobileListingsUseCase,
-    GetWebListingDetailUseCase
-  ],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

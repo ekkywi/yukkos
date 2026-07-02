@@ -1,42 +1,27 @@
-import {
-    ExceptionFilter,
-    Catch,
-    ArgumentsHost,
-    HttpException,
-    HttpStatus,
-} from '@nestjs/common';
-import { Request, Response } from 'express';
+import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
+import { Response } from 'express';
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
-    catch(exception: unknown, host: ArgumentsHost) {
-        const ctx = host.switchToHttp();
-        const response = ctx.getResponse<Response>();
-        const request = ctx.getRequest<Request>();
+  catch(exception: unknown, host: ArgumentsHost) {
+    const ctx = host.switchToHttp();
+    const response = ctx.getResponse<Response>();
+    
+    const status = 
+      exception instanceof HttpException 
+        ? exception.getStatus() 
+        : HttpStatus.INTERNAL_SERVER_ERROR;
 
-        const status =
-            exception instanceof HttpException
-            ? exception.getStatus()
-            : HttpStatus.INTERNAL_SERVER_ERROR;
-        
-        const message =
-            exception instanceof HttpException
-            ? exception.getResponse()
-            : 'Internal server error occured';
+    const errorResponse = 
+      exception instanceof HttpException 
+        ? exception.getResponse() 
+        : 'Internal server error';
 
-        const errorResponse = {
-            success: false,
-            timestamp: new Date().toISOString(),
-            path: request.url,
-            statusCode: status,
-            error: typeof message === 'string' ? message : (message as any).message || message,
-        };
-
-        console.error(`[GlobalExceptionFilter] ${request.method} ${request.url} - Status: ${status}`);
-        if (!(exception instanceof HttpException)) {
-            console.error(exception);
-        }
-
-        response.status(status).json(errorResponse);
-    }
+    response.status(status).json({
+      success: false,
+      statusCode: status,
+      error: typeof errorResponse === 'string' ? errorResponse : (errorResponse as any).message || errorResponse,
+      timestamp: new Date().toISOString(),
+    });
+  }
 }
