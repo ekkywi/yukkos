@@ -7,7 +7,7 @@ export class LoginUserDto {
     @IsEmail({}, { message: 'Format email tidak valid' })
     email!: string;
 
-    @ApiProperty({ example: 'Passwordkuat123!', description: 'Kata Sandi' })
+    @ApiProperty({ example: 'PasswordKuat123!', description: 'Kata Sandi' })
     @IsNotEmpty({ message: 'Password tidak boleh kosong' })
     @IsString()
     password!: string;

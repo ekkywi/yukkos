@@ -8,6 +8,7 @@ import { JwtTokenService } from '../security/jwt/jwt-token.service';
 import { I_USER_REPOSITORY } from '../../domain/repositories/i-user.repository';
 import { I_TOKEN_SERVICE } from '../../application/ports/i-token.service';
 import { PrismaService } from '../database/prisma/prisma.service';
+import { JwtStrategy } from '../security/jwt.strategy';
 
 @Module({
   imports: [
@@ -19,9 +20,9 @@ import { PrismaService } from '../database/prisma/prisma.service';
   controllers: [AuthController],
   providers: [
     PrismaService, 
-    
     RegisterUserUseCase,
     LoginUserUseCase,
+    JwtStrategy,
     {
       provide: I_USER_REPOSITORY,
       useClass: PrismaUserRepository,

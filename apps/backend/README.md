@@ -25,6 +25,12 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+## API Documentation
+
+- Swagger UI: `http://localhost:3000/api/docs`
+- Postman collection: `docs/postman/yukkos-api.postman_collection.json`
+- Postman environment: `docs/postman/yukkos-api.postman_environment.json`
+
 ## Project setup
 
 ```bash
