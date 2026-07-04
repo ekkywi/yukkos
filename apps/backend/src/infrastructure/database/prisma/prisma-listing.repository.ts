@@ -137,11 +137,63 @@ export class PrismaListingRepository implements IListingRepository {
   }
 
   async findAllByProviderId(providerId: string): Promise<ListingEntity[]> {
-    throw new Error('Method not implemented.');
+    const models = await this.prisma.listing.findMany({
+      where: { providerId },
+      include: {
+        facilities: {
+          include: { facility: true }
+        }
+      },
+      orderBy: { createdAt: 'desc' }
+    });
+
+    return models.map((model) => {
+      const facilityNames = model.facilities.map((f) => f.facility.name);
+      return new ListingEntity(
+        model.id,
+        model.providerId,
+        model.name,
+        model.city,
+        model.fullAddress,
+        model.monthlyPrice,
+        model.description,
+        model.status as StatusListing,
+        facilityNames,
+        model.createdAt,
+        model.updatedAt,
+      );
+    });
   }
 
   async findByIdAndProviderId(id: string, providerId: string): Promise<ListingEntity | null> {
-    throw new Error('Method not implemented.');
+    const model = await this.prisma.listing.findUnique({
+      where: { id },
+      include: {
+        facilities: {
+          include: { facility: true }
+        }
+      },
+    });
+
+    if (!model || model.providerId !== providerId) {
+      return null;
+    }
+
+    const facilityNames = model.facilities.map((f) => f.facility.name);
+
+    return new ListingEntity(
+      model.id,
+      model.providerId,
+      model.name,
+      model.city,
+      model.fullAddress,
+      model.monthlyPrice,
+      model.description,
+      model.status as StatusListing,
+      facilityNames,
+      model.createdAt,
+      model.updatedAt,
+    );
   }
 
   async findAllActive(): Promise<ListingEntity[]> {
