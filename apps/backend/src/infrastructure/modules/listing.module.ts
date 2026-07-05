@@ -26,7 +26,6 @@ import { PrismaService } from '../database/prisma/prisma.service';
   ],
   providers: [
     PrismaService,
-    
     CreateListingUseCase,
     UpdateListingUseCase,
     DeleteListingUseCase,
@@ -41,5 +40,6 @@ import { PrismaService } from '../database/prisma/prisma.service';
       useClass: PrismaListingRepository,
     },
   ],
+  exports: [I_LISTING_REPOSITORY], 
 })
 export class ListingModule {}

@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './infrastructure/modules/auth.module';
 import { ListingModule } from './infrastructure/modules/listing.module';
 import { MediaModule } from './infrastructure/modules/media.module';
+import { BookingModule } from './infrastructure/modules/booking.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { MediaModule } from './infrastructure/modules/media.module';
     AuthModule,
     ListingModule,
     MediaModule,
+    BookingModule,
   ],
   controllers: [],
   providers: [],
