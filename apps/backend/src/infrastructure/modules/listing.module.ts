@@ -10,6 +10,7 @@ import { DeleteListingUseCase } from '../../application/use-cases/listing/delete
 import { GetProviderListingsUseCase } from '../../application/use-cases/listing/get-provider-listings.use-case';
 import { GetProviderListingDetailUseCase } from '../../application/use-cases/listing/get-provider-listing-detail.use-case';
 import { GetMobileListingsUseCase } from '../../application/use-cases/listing/get-mobile-listings.use-case';
+import { GetMobileListingDetailUseCase } from '../../application/use-cases/listing/get-mobile-listing-detail.use-case';
 import { GetWebListingsUseCase } from '../../application/use-cases/listing/get-web-listings.use-case';
 import { GetWebListingDetailUseCase } from '../../application/use-cases/listing/get-web-listing-detail.use-case';
 
@@ -32,6 +33,7 @@ import { PrismaService } from '../database/prisma/prisma.service';
     GetProviderListingsUseCase,
     GetProviderListingDetailUseCase,
     GetMobileListingsUseCase,
+    GetMobileListingDetailUseCase,
     GetWebListingsUseCase,
     GetWebListingDetailUseCase,
     {
