@@ -58,7 +58,7 @@ export class ProviderListingController {
             throw new BadRequestException('Provider tidak terautentikasi');
         }
 
-        const data = await this.createListingUseCase.execute(dto, providerId);
+        const data = await this.createListingUseCase.execute(providerId, dto);
         return { success: true, data };
     }
 

@@ -4,4 +4,5 @@ export class MobileListingResponseDto {
     city!: string;
     monthlyPrice!: number;
     status!: string;
+    mainImage!: string | null;
 }

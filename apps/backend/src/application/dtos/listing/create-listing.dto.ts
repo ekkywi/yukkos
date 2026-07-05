@@ -16,7 +16,7 @@ export class CreateListingDto {
     @ApiProperty({ example: 'Jl. Tlogosari Raya No 15', description: 'Alamat lengkap' })
     @IsNotEmpty()
     @IsString()
-    fullAddress: string;
+    fullAddress!: string;
 
     @ApiProperty({ example: 850000, description: 'Harga sewa per bulan' })
     @IsNotEmpty()
@@ -27,7 +27,7 @@ export class CreateListingDto {
     @ApiProperty({ example: 'Kos nyaman, bersih, dan aman.', description: 'Deskirpsi fasilitas dan aturan' })
     @IsNotEmpty()
     @IsString()
-    description: string;
+    description!: string;
 
     @ApiPropertyOptional({ enum: StatusListing, example: StatusListing.AVAILABLE })
     @IsOptional()
@@ -39,4 +39,9 @@ export class CreateListingDto {
     @IsArray()
     @IsInt({ each: true })
     facilityIds?: number[];
+
+    @ApiPropertyOptional({ description: 'URL gambar utama dari Cloudinary' })
+    @IsOptional()
+    @IsString()
+    mainImage?: string;
 }

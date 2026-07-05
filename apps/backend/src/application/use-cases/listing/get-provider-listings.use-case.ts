@@ -20,6 +20,7 @@ export class GetProviderListingsUseCase {
             monthlyPrice: listing.monthlyPrice,
             status: listing.status,
             createdAt: listing.createdAt!,
+            mainImage: listing.mainImage,
         }));
     }
 }

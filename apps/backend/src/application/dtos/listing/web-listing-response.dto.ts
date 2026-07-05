@@ -4,5 +4,6 @@ export class WebListingResponseDto {
     city!: string;
     monthlyPrice!: number;
     shortDescription!: string;
+    mainImage!: string | null;
     status!: string;
 }

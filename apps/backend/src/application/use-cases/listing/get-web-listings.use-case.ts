@@ -20,6 +20,7 @@ export class GetWebListingsUseCase {
             monthlyPrice: listing.monthlyPrice,
             shortDescription: listing.description.substring(0, 50) + '...',
             status: listing.status,
+            mainImage: listing.mainImage,
         }));
     }
 }

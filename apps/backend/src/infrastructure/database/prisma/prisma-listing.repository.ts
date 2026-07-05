@@ -21,6 +21,7 @@ export class PrismaListingRepository implements IListingRepository {
           monthlyPrice: data.monthlyPrice,
           description: data.description,
           status: data.status as PrismaStatusListing,
+          mainImage: data.mainImage,
           facilities: {
             create: data.facilityIds?.map(facilityId => ({
               facility: { connect: { id: facilityId } }
@@ -56,6 +57,7 @@ export class PrismaListingRepository implements IListingRepository {
         model.description,
         model.status as StatusListing,
         facilityNames,
+        model.mainImage,
         model.createdAt,
         model.updatedAt
       );
@@ -98,6 +100,7 @@ export class PrismaListingRepository implements IListingRepository {
             monthlyPrice: data.monthlyPrice,
             description: data.description,
             status: data.status as PrismaStatusListing,
+            mainImage: data.mainImage,
             facilities: facilitiesUpdate,
           },
           include: {
@@ -108,9 +111,18 @@ export class PrismaListingRepository implements IListingRepository {
         const facilityNames = model.facilities.map(f => f.facility.name);
 
         return new ListingEntity(
-          model.id, model.providerId, model.name, model.city, model.fullAddress,
-          model.monthlyPrice, model.description, model.status as StatusListing,
-          facilityNames, model.createdAt, model.updatedAt
+          model.id, 
+          model.providerId, 
+          model.name, 
+          model.city, 
+          model.fullAddress,
+          model.monthlyPrice, 
+          model.description, 
+          model.status as StatusListing,
+          facilityNames, 
+          model.mainImage,
+          model.createdAt, 
+          model.updatedAt
         );
       } catch (error: any) {
         if (error instanceof ListingNotFoundError) throw error;
@@ -159,8 +171,9 @@ export class PrismaListingRepository implements IListingRepository {
         model.description,
         model.status as StatusListing,
         facilityNames,
+        model.mainImage,
         model.createdAt,
-        model.updatedAt,
+        model.updatedAt
       );
     });
   }
@@ -191,8 +204,9 @@ export class PrismaListingRepository implements IListingRepository {
       model.description,
       model.status as StatusListing,
       facilityNames,
+      model.mainImage,
       model.createdAt,
-      model.updatedAt,
+      model.updatedAt
     );
   }
 
@@ -222,8 +236,9 @@ export class PrismaListingRepository implements IListingRepository {
         model.description,
         model.status as StatusListing,
         facilityNames,
+        model.mainImage,
         model.createdAt,
-        model.updatedAt,
+        model.updatedAt
       );
     });
   }
@@ -254,8 +269,9 @@ export class PrismaListingRepository implements IListingRepository {
       model.description,
       model.status as StatusListing,
       facilityNames,
+      model.mainImage,
       model.createdAt,
-      model.updatedAt,
+      model.updatedAt
     );
   }
 }

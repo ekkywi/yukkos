@@ -26,7 +26,8 @@ export class GetMobileListingDetailUseCase {
             monthlyPrice: listing.monthlyPrice,
             description: listing.description,
             status: listing.status,
-            facilites: listing.facilities || [],
+            facilities: listing.facilities || [],
+            mainImage: listing.mainImage,
         };
     }
 }

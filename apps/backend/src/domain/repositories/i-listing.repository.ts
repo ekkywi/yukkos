@@ -1,6 +1,6 @@
 import { ListingEntity } from "../entities/listing.entity";
 
-export const I_LISTING_REPOSITORY = 'IListngRepository';
+export const I_LISTING_REPOSITORY = 'IListingRepository';
 
 export type CreateListingPayload = Omit<ListingEntity, 'id' | 'createdAt' | 'updatedAt' | 'facilities'> & {
   facilityIds?: number[];

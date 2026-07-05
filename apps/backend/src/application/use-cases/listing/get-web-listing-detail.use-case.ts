@@ -27,6 +27,7 @@ export class GetWebListingDetailUseCase {
             monthlyPrice: listing.monthlyPrice,
             descrption: listing.description,
             status: listing.status,
+            mainImage: listing.mainImage,
             facilities: listing.facilities || [],
         };
     }

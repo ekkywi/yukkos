@@ -40,6 +40,8 @@ model Listing {
   status        StatusListing      @default(AVAILABLE)
   facilities    ListingFacility[]
 
+  mainImage     String?
+
   createdAt     DateTime           @default(now())
   updatedAt     DateTime           @updatedAt
 

@@ -6,5 +6,6 @@ export class MobileListingDetailResponseDto {
     monthlyPrice!: number;
     description!: string;
     status!: string;
-    facilites!: string[];
+    mainImage!: string | null;
+    facilities!: string[];
 }

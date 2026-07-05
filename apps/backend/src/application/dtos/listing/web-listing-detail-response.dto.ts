@@ -7,5 +7,6 @@ export class WebListingDetailResponseDto {
     monthlyPrice!: number;
     descrption!: string;
     status!: string;
+    mainImage!: string | null;
     facilities!: string[];
 }

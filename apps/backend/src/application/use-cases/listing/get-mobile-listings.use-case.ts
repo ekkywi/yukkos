@@ -19,6 +19,7 @@ export class GetMobileListingsUseCase {
         city: listing.city,
         monthlyPrice: listing.monthlyPrice,
         status: listing.status,
+        mainImage: listing.mainImage,
         }));
   }
 }

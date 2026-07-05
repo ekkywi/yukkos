@@ -4,5 +4,5 @@ export class ProviderListingResponseDto {
     city!: string;
     monthlyPrice!: number;
     status!: string;
-    createdAt: Date;
+    createdAt!: Date;
 }

@@ -11,7 +11,7 @@ export class CreateListingUseCase {
     private readonly listingRepository: IListingRepository,
   ) {}
 
-  async execute(dto: CreateListingDto, providerId: string): Promise<ListingEntity> {
+  async execute(providerId: string, dto: CreateListingDto): Promise<ListingEntity> {
     return this.listingRepository.create({
       providerId,
       name: dto.name,
@@ -19,8 +19,9 @@ export class CreateListingUseCase {
       fullAddress: dto.fullAddress,
       monthlyPrice: dto.monthlyPrice,
       description: dto.description,
-      status: dto.status || StatusListing.AVAILABLE,
+      status: StatusListing.AVAILABLE,
       facilityIds: dto.facilityIds || [],
+      mainImage: dto.mainImage || null,
     });
   }
 }
