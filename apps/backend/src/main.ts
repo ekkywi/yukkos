@@ -7,6 +7,10 @@ import { GlobalExceptionFilter } from './infrastructure/filters/global-exception
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const port = Number(process.env.PORT || 3000);
+  const host = process.env.HOST || '127.0.0.1';
+
+  app.enableCors();
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   
@@ -21,6 +25,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
-  await app.listen(3000);
+  await app.listen(port, host);
 }
 bootstrap();

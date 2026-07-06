@@ -14,8 +14,13 @@ enum Role {
 
 enum StatusListing {
   AVAILABLE
-  FEW_LEFT
   FULL
+}
+
+enum TypeListing {
+  MALE
+  FEMALE
+  MIXED
 }
 
 enum BookingStatus {
@@ -26,53 +31,55 @@ enum BookingStatus {
 }
 
 model User {
-  id          String      @id @default(uuid())
-  email       String      @unique
-  password    String
-  name        String
-  role        Role        @default(TENANT)
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      Role     @default(TENANT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  listings Listing[]
+  listings  Listing[]
+  bookings  Booking[]
 }
 
 model Listing {
-  id            String             @id @default(uuid())
-  name          String
-  city          String
-  fullAddress   String             @db.Text
-  monthlyPrice  Int
-  description   String             @db.Text
-  status        StatusListing      @default(AVAILABLE)
-  facilities    ListingFacility[]
-  bookings      Booking[]
+  id           String          @id @default(uuid())
+  name         String
+  city         String
+  fullAddress  String          @db.Text
+  monthlyPrice Int
+  description  String          @db.Text
+  type         TypeListing
+  status       StatusListing   @default(AVAILABLE)
+  facilities   ListingFacility[]
+  bookings     Booking[]
 
-  mainImage     String?
+  mainImage    String?
 
-  createdAt     DateTime           @default(now())
-  updatedAt     DateTime           @updatedAt
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
 
-  providerId    String
-  provider      User               @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  providerId   String
+  provider     User            @relation(fields: [providerId], references: [id], onDelete: Cascade)
 
   @@map("listings")
 }
 
 model Facility {
-  id          Int                @id @default(autoincrement())
-  name        String             @unique
-  listings    ListingFacility[]
+  id       Int               @id @default(autoincrement())
+  name     String            @unique
+  listings ListingFacility[]
 
   @@map("facilities")
 }
 
 model ListingFacility {
-  listingId   String
-  facilityId  Int
+  listingId  String
+  facilityId Int
   
-  listing     Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
-  facility    Facility @relation(fields: [facilityId], references: [id], onDelete: Cascade)
+  listing    Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  facility   Facility @relation(fields: [facilityId], references: [id], onDelete: Cascade)
 
   @@id([listingId, facilityId])
   @@map("listing_facilities")
@@ -90,4 +97,5 @@ model Booking {
   updatedAt      DateTime      @updatedAt
 
   listing        Listing       @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  tenant         User          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 }

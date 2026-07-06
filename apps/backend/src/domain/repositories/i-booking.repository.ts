@@ -2,7 +2,10 @@ import { BookingEntity, BookingStatus } from '../entities/booking.entity';
 
 export const I_BOOKING_REPOSITORY = 'IBookingRepository';
 
-export type CreateBookingPayload = Omit<BookingEntity, 'id' | 'status' | 'createdAt' | 'updatedAt'>;
+export type CreateBookingPayload = Omit<
+  BookingEntity,
+  'id' | 'status' | 'createdAt' | 'updatedAt' | 'listingName' | 'tenantName' | 'listingCity'
+>;
 
 export interface IBookingRepository {
   create(data: CreateBookingPayload): Promise<BookingEntity>;

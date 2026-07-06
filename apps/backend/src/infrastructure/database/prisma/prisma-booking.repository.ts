@@ -114,6 +114,7 @@ export class PrismaBookingRepository implements IBookingRepository {
       orderBy: { createdAt: 'desc' },
       include: {
         listing: true,
+        tenant: true,
       },
     });
 
@@ -129,6 +130,9 @@ export class PrismaBookingRepository implements IBookingRepository {
           model.totalPrice,
           model.createdAt,
           model.updatedAt,
+          model.listing?.name,
+          model.tenant?.name,
+          model.listing?.city,
         ),
     );
   }

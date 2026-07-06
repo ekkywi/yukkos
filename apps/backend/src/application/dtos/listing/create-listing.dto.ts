@@ -1,6 +1,6 @@
 import { IsString, IsNotEmpty, IsNumber, IsOptional, IsEnum, IsArray, IsInt, Min } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { StatusListing } from '../../../domain/entities/listing.entity';
+import { StatusListing, TypeListing } from '../../../domain/entities/listing.entity';
 
 export class CreateListingDto {
     @ApiProperty({ example: 'Kos Bintang Terang', description: 'Nama properti kos' })
@@ -28,6 +28,11 @@ export class CreateListingDto {
     @IsNotEmpty()
     @IsString()
     description!: string;
+
+    @ApiProperty({ enum: TypeListing, example: TypeListing.MIXED, description: 'Target penghuni kos' })
+    @IsNotEmpty()
+    @IsEnum(TypeListing)
+    type!: TypeListing;
 
     @ApiPropertyOptional({ enum: StatusListing, example: StatusListing.AVAILABLE })
     @IsOptional()

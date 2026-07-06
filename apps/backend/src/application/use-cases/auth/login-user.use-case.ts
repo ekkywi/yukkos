@@ -11,7 +11,7 @@ export class LoginUserUseCase {
         @Inject(I_TOKEN_SERVICE) private readonly tokenService: ITokenService
     ) {}
 
-    async execute(dto: LoginUserDto): Promise<{ access_token: string; role: string }> {
+    async execute(dto: LoginUserDto): Promise<{ accessToken: string; role: string }> {
         const user = await this.userRepository.findByEmail(dto.email);
 
         if (!user) {
@@ -31,7 +31,7 @@ export class LoginUserUseCase {
         });
 
         return {
-            access_token: token,
+            accessToken: token,
             role: user.role,
         }
     }

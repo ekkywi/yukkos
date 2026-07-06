@@ -16,5 +16,8 @@ export class BookingEntity {
     public readonly totalPrice: number,
     public readonly createdAt?: Date,
     public readonly updatedAt?: Date,
+    public readonly listingName?: string,
+    public readonly tenantName?: string,
+    public readonly listingCity?: string,
   ) {}
 }

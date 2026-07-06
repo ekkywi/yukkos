@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Role, StatusListing, TypeListing } from '@prisma/client';
 import { Pool } from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
 import * as dotenv from 'dotenv';
@@ -23,7 +23,7 @@ async function main() {
       email: 'admin@yukkos.com',
       name: 'Admin Pemilik Kos',
       password: hashedPassword,
-      role: 'PROVIDER',
+      role: Role.PROVIDER,
     },
   });
   console.log(`User Provider dibuat: ${provider.email}`);
@@ -34,7 +34,7 @@ async function main() {
   const kamarMandiDalam = await prisma.facility.upsert({ where: { name: 'Kamar Mandi Dalam' }, update: {}, create: { name: 'Kamar Mandi Dalam' } });
   const parkirMobil = await prisma.facility.upsert({ where: { name: 'Parkir Mobil' }, update: {}, create: { name: 'Parkir Mobil' } });
 
-  // 3. Membuat Listing Kos 1 dengan menautkan providerId
+  // 3. Membuat Listing Kos 1 (Kos Putra)
   const kos1 = await prisma.listing.create({
     data: {
       name: 'Kos Bintang Terang',
@@ -42,15 +42,23 @@ async function main() {
       fullAddress: 'Jl. Tlogosari Raya No. 15, Pedurungan, Semarang',
       monthlyPrice: 850000,
       description: 'Kos nyaman dan tenang, cocok untuk mahasiswa.',
-      status: 'AVAILABLE',
-      providerId: provider.id,
+      status: StatusListing.AVAILABLE,
+      type: TypeListing.MALE,
+      provider: {
+        connect: {
+          id: provider.id,
+        },
+      },
       facilities: {
-        create: [{ facilityId: wifi.id }, { facilityId: kamarMandiDalam.id }],
+        create: [
+          { facility: { connect: { id: wifi.id } } },
+          { facility: { connect: { id: kamarMandiDalam.id } } },
+        ],
       },
     },
   });
 
-  // 4. Membuat Listing Kos 2 dengan menautkan providerId
+  // 4. Membuat Listing Kos 2 (Kos Putri)
   const kos2 = await prisma.listing.create({
     data: {
       name: 'Kos Eksklusif Mawar',
@@ -58,22 +66,32 @@ async function main() {
       fullAddress: 'Jl. Majapahit No. 100, Gayamsari, Semarang',
       monthlyPrice: 1500000,
       description: 'Kos eksklusif dengan fasilitas lengkap.',
-      status: 'FULL',
-      providerId: provider.id,
+      status: StatusListing.FULL,
+      type: TypeListing.FEMALE,
+      provider: {
+        connect: {
+          id: provider.id,
+        },
+      },
       facilities: {
-        create: [{ facilityId: wifi.id }, { facilityId: ac.id }, { facilityId: kamarMandiDalam.id }, { facilityId: parkirMobil.id }],
+        create: [
+          { facility: { connect: { id: wifi.id } } },
+          { facility: { connect: { id: ac.id } } },
+          { facility: { connect: { id: kamarMandiDalam.id } } },
+          { facility: { connect: { id: parkirMobil.id } } },
+        ],
       },
     },
   });
 
   console.log('Seeding selesai.');
-  console.log(`Dibuat: ${kos1.name} (ID: ${kos1.id})`);
-  console.log(`Dibuat: ${kos2.name} (ID: ${kos2.id})`);
+  console.log(`Dibuat: ${kos1.name} (Tipe: ${kos1.type}, ID: ${kos1.id})`);
+  console.log(`Dibuat: ${kos2.name} (Tipe: ${kos2.type}, ID: ${kos2.id})`);
 }
 
 main()
   .catch((e) => {
-    console.error(e);
+    console.error('Galat saat seeding:', e);
     process.exit(1);
   })
   .finally(async () => {

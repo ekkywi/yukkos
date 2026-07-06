@@ -1,7 +1,19 @@
 @import "tailwindcss";
 
 @theme {
+  --color-brand-primary: #03ac0e;
+  --color-brand-secondary: #028a0f;
+  --color-brand-accent: #f59e0b;
+  
   --color-status-normal: #22c55e;
   --color-status-warning: #f59e0b;
   --color-status-danger: #ef4444;
+}
+
+@utility hide-scrollbar {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

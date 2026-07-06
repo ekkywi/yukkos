@@ -19,6 +19,7 @@ export class CreateListingUseCase {
       fullAddress: dto.fullAddress,
       monthlyPrice: dto.monthlyPrice,
       description: dto.description,
+      type: dto.type,
       status: StatusListing.AVAILABLE,
       facilityIds: dto.facilityIds || [],
       mainImage: dto.mainImage || null,

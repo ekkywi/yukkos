@@ -3,13 +3,16 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagg
 import { UpdateBookingStatusUseCase } from '../../application/use-cases/booking/update-booking-status.use-case';
 import { UpdateBookingStatusDto } from '../../application/dtos/booking/update-booking-status.dto';
 import { JwtAuthGuard } from '../security/jwt-auth.guard';
+import { RolesGuard } from '../security/roles.guard';
+import { Roles } from '../security/roles.decorator';
 import { I_BOOKING_REPOSITORY } from '../../domain/repositories/i-booking.repository';
 import type { IBookingRepository } from '../../domain/repositories/i-booking.repository';
 import { Inject } from '@nestjs/common';
 
 @ApiTags('Provider - Manajemen Pesanan Masuk')
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles('PROVIDER')
 @Controller('v1/provider/bookings')
 export class ProviderBookingController {
   constructor(

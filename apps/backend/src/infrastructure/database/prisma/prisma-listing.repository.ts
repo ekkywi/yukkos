@@ -1,10 +1,25 @@
-import { Injectable, BadRequestException, InternalServerErrorException } from '@nestjs/common';
-import { Facility, Prisma, StatusListing as PrismaStatusListing } from '@prisma/client';
+import { Injectable } from '@nestjs/common';
+import { Prisma, StatusListing as PrismaStatusListing } from '@prisma/client';
 import { IListingRepository, CreateListingPayload } from '../../../domain/repositories/i-listing.repository';
 import { UpdateListingPayload } from '../../../domain/repositories/i-listing.repository';
-import { ListingEntity, StatusListing } from '../../../domain/entities/listing.entity';
+import { ListingEntity, StatusListing, TypeListing } from '../../../domain/entities/listing.entity';
 import { PrismaService } from './prisma.service';
 import { RelationalConstraintError, DatabaseOperationError, ListingNotFoundError } from '../../../domain/exceptions/database.exception';
+
+type ListingModelWithType = Prisma.ListingGetPayload<{
+  include: {
+    facilities: {
+      include: {
+        facility: true;
+      };
+    };
+    provider: {
+      select: {
+        name: true;
+      };
+    };
+  };
+}>;
 
 @Injectable()
 export class PrismaListingRepository implements IListingRepository {
@@ -20,6 +35,7 @@ export class PrismaListingRepository implements IListingRepository {
           fullAddress: data.fullAddress,
           monthlyPrice: data.monthlyPrice,
           description: data.description,
+          type: data.type as any,
           status: data.status as PrismaStatusListing,
           mainImage: data.mainImage,
           facilities: {
@@ -27,23 +43,20 @@ export class PrismaListingRepository implements IListingRepository {
               facility: { connect: { id: facilityId } }
             })) || []
           }
-        },
+        } as any,
         include: {
           facilities: {
             include: {
               facility: true
             }
-          }
+          },
+          provider: {
+            select: {
+              name: true,
+            },
+          },
         }
-      }) as Prisma.ListingGetPayload<{
-        include: {
-          facilities: {
-            include: {
-              facility: true;
-            };
-          };
-        };
-      }>;
+      }) as ListingModelWithType;
 
       const facilityNames = model.facilities.map(f => f.facility.name);
 
@@ -55,9 +68,11 @@ export class PrismaListingRepository implements IListingRepository {
         model.fullAddress,
         model.monthlyPrice,
         model.description,
+        model.type as TypeListing,
         model.status as StatusListing,
         facilityNames,
         model.mainImage,
+        model.provider?.name ?? null,
         model.createdAt,
         model.updatedAt
       );
@@ -99,14 +114,20 @@ export class PrismaListingRepository implements IListingRepository {
             fullAddress: data.fullAddress,
             monthlyPrice: data.monthlyPrice,
             description: data.description,
+            type: data.type as any,
             status: data.status as PrismaStatusListing,
-            mainImage: data.mainImage,
-            facilities: facilitiesUpdate,
+          mainImage: data.mainImage,
+          facilities: facilitiesUpdate,
+        } as any,
+        include: {
+          facilities: { include: { facility: true } },
+          provider: {
+            select: {
+              name: true,
+            },
           },
-          include: {
-            facilities: { include: { facility: true } }
-          }
-        }) as Prisma.ListingGetPayload<{ include: { facilities: { include: { facility: true } } } }>;
+        }
+      }) as ListingModelWithType;
 
         const facilityNames = model.facilities.map(f => f.facility.name);
 
@@ -118,9 +139,11 @@ export class PrismaListingRepository implements IListingRepository {
           model.fullAddress,
           model.monthlyPrice, 
           model.description, 
+          model.type as TypeListing,
           model.status as StatusListing,
           facilityNames, 
           model.mainImage,
+          model.provider?.name ?? null,
           model.createdAt, 
           model.updatedAt
         );
@@ -154,10 +177,15 @@ export class PrismaListingRepository implements IListingRepository {
       include: {
         facilities: {
           include: { facility: true }
-        }
+        },
+        provider: {
+          select: {
+            name: true,
+          },
+        },
       },
       orderBy: { createdAt: 'desc' }
-    });
+    }) as ListingModelWithType[];
 
     return models.map((model) => {
       const facilityNames = model.facilities.map((f) => f.facility.name);
@@ -169,9 +197,11 @@ export class PrismaListingRepository implements IListingRepository {
         model.fullAddress,
         model.monthlyPrice,
         model.description,
+        model.type as TypeListing,
         model.status as StatusListing,
         facilityNames,
         model.mainImage,
+        model.provider?.name ?? null,
         model.createdAt,
         model.updatedAt
       );
@@ -184,9 +214,14 @@ export class PrismaListingRepository implements IListingRepository {
       include: {
         facilities: {
           include: { facility: true }
-        }
+        },
+        provider: {
+          select: {
+            name: true,
+          },
+        },
       },
-    });
+    }) as ListingModelWithType | null;
 
     if (!model || model.providerId !== providerId) {
       return null;
@@ -202,9 +237,11 @@ export class PrismaListingRepository implements IListingRepository {
       model.fullAddress,
       model.monthlyPrice,
       model.description,
+      model.type as TypeListing,
       model.status as StatusListing,
       facilityNames,
       model.mainImage,
+      model.provider?.name ?? null,
       model.createdAt,
       model.updatedAt
     );
@@ -213,7 +250,7 @@ export class PrismaListingRepository implements IListingRepository {
   async findAllActive(): Promise<ListingEntity[]> {
     const models = await this.prisma.listing.findMany({
       where: {
-        status: 'AVAILABLE',
+        status: PrismaStatusListing.AVAILABLE,
       },
       include: {
         facilities: {
@@ -221,8 +258,13 @@ export class PrismaListingRepository implements IListingRepository {
             facility: true,
           },
         },
+        provider: {
+          select: {
+            name: true,
+          },
+        },
       },
-    });
+    }) as ListingModelWithType[];
 
     return models.map((model) => {
       const facilityNames = model.facilities.map((f) => f.facility.name);
@@ -234,9 +276,11 @@ export class PrismaListingRepository implements IListingRepository {
         model.fullAddress,
         model.monthlyPrice,
         model.description,
+        model.type as TypeListing,
         model.status as StatusListing,
         facilityNames,
         model.mainImage,
+        model.provider?.name ?? null,
         model.createdAt,
         model.updatedAt
       );
@@ -252,8 +296,13 @@ export class PrismaListingRepository implements IListingRepository {
             facility: true,
           },
         },
+        provider: {
+          select: {
+            name: true,
+          },
+        },
       },
-    });
+    }) as ListingModelWithType | null;
 
     if (!model) return null;
 
@@ -267,9 +316,11 @@ export class PrismaListingRepository implements IListingRepository {
       model.fullAddress,
       model.monthlyPrice,
       model.description,
+      model.type as TypeListing,
       model.status as StatusListing,
       facilityNames,
       model.mainImage,
+      model.provider?.name ?? null,
       model.createdAt,
       model.updatedAt
     );

@@ -16,6 +16,7 @@ export class GetWebListingsUseCase {
         return listings.map((listing) => ({
             id: listing.id,
             name: listing.name,
+            providerName: listing.providerName ?? '',
             city: listing.city,
             monthlyPrice: listing.monthlyPrice,
             shortDescription: listing.description.substring(0, 50) + '...',
