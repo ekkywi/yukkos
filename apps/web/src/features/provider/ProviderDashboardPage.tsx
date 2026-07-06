@@ -80,8 +80,8 @@ export function ProviderDashboardPage() {
   const recentListings = listings.slice(0, 5);
 
   return (
-    <div className="space-y-4">
-      <div className="grid gap-4 xl:grid-cols-[1.35fr_0.65fr]">
+    <div className="space-y-4 xl:space-y-5">
+      <div className="grid gap-4 xl:grid-cols-[1.1fr_0.9fr] 2xl:gap-5">
         <section className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex items-start gap-3">
@@ -90,13 +90,13 @@ export function ProviderDashboardPage() {
               </div>
               <div>
                 <div className="flex flex-wrap items-center gap-2">
-                  <h2 className="text-xl font-black text-slate-950">Provider YukKos</h2>
+                  <h2 className="text-xl font-black text-slate-950">Akun Provider</h2>
                   <span className="rounded-md bg-emerald-50 px-2.5 py-1 text-xs font-bold text-brand-primary ring-1 ring-emerald-200">
-                    Toko aktif
+                    Akun aktif
                   </span>
                 </div>
                 <p className="mt-1 text-sm text-slate-600">
-                  {summary.totalListings} produk kos dikelola, {summary.pendingBookings} booking perlu diproses.
+                  {summary.totalListings} hunian dikelola, {summary.pendingBookings} booking perlu diproses.
                 </p>
               </div>
             </div>
@@ -104,7 +104,7 @@ export function ProviderDashboardPage() {
             <div className="grid grid-cols-3 gap-2 rounded-xl border border-slate-200 bg-slate-50 p-2 text-center">
               <div className="px-3 py-2">
                 <p className="text-lg font-black text-slate-950">{isLoading ? '...' : summary.totalListings}</p>
-                <p className="text-xs font-medium text-slate-500">Kos</p>
+                <p className="text-xs font-medium text-slate-500">Hunian</p>
               </div>
               <div className="px-3 py-2">
                 <p className="text-lg font-black text-brand-primary">{isLoading ? '...' : summary.availableListings}</p>
@@ -122,10 +122,10 @@ export function ProviderDashboardPage() {
           <p className="text-sm font-bold text-slate-950">Aksi cepat</p>
           <div className="mt-3 grid gap-2">
             <Link
-              to="/provider/kos?create=1"
+              to="/provider/hunian?create=1"
               className="rounded-lg bg-brand-primary px-4 py-2.5 text-center text-sm font-bold text-white transition hover:bg-brand-secondary"
             >
-              Tambah Kos
+              Tambah Hunian
             </Link>
             <div className="grid grid-cols-2 gap-2">
               <Link
@@ -145,10 +145,10 @@ export function ProviderDashboardPage() {
         </section>
       </div>
 
-      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4 2xl:gap-4">
         {[
-          { label: 'Total Kos', value: summary.totalListings, hint: 'Produk kos aktif', tone: 'bg-brand-primary' },
-          { label: 'Kos Tersedia', value: summary.availableListings, hint: 'Bisa dipesan', tone: 'bg-emerald-500' },
+          { label: 'Total Hunian', value: summary.totalListings, hint: 'Produk aktif', tone: 'bg-brand-primary' },
+          { label: 'Hunian Tersedia', value: summary.availableListings, hint: 'Bisa dipesan', tone: 'bg-emerald-500' },
           { label: 'Booking Masuk', value: summary.totalBookings, hint: 'Total pesanan', tone: 'bg-slate-400' },
           { label: 'Perlu Diproses', value: summary.pendingBookings, hint: 'Prioritas hari ini', tone: 'bg-amber-500' },
         ].map((card) => (
@@ -171,19 +171,19 @@ export function ProviderDashboardPage() {
         </div>
       ) : null}
 
-      <div className="grid gap-4 xl:grid-cols-[0.86fr_1.14fr]">
-        <section className="rounded-xl border border-slate-200 bg-white shadow-sm">
+      <div className="grid items-stretch gap-4 xl:grid-cols-[0.95fr_1.05fr] 2xl:gap-5">
+        <section className="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
           <div className="flex items-center justify-between gap-3 border-b border-slate-200 px-4 py-3">
             <div>
-              <p className="text-xs font-semibold uppercase text-amber-600">Perlu diproses</p>
-              <h2 className="text-base font-black text-slate-950">Booking pending</h2>
+            <p className="text-xs font-semibold uppercase text-amber-600">Perlu diproses</p>
+            <h2 className="text-base font-black text-slate-950">Booking pending</h2>
             </div>
             <Link to="/provider/bookings" className="text-sm font-bold text-brand-primary hover:text-brand-secondary">
               Lihat semua
             </Link>
           </div>
 
-          <div className="divide-y divide-slate-100">
+          <div className="flex-1 divide-y divide-slate-100">
             {pendingBookings.length > 0 ? (
               pendingBookings.map((booking) => (
                 <article key={booking.id} className="px-4 py-3">
@@ -214,10 +214,10 @@ export function ProviderDashboardPage() {
           </div>
         </section>
 
-        <section className="rounded-xl border border-slate-200 bg-white shadow-sm">
+        <section className="flex h-full min-h-0 flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
           <div className="flex items-center justify-between gap-3 border-b border-slate-200 px-4 py-3">
             <div>
-              <p className="text-xs font-semibold uppercase text-brand-primary">Booking terbaru</p>
+            <p className="text-xs font-semibold uppercase text-brand-primary">Booking terbaru</p>
               <h2 className="text-base font-black text-slate-950">Daftar pesanan</h2>
             </div>
             <Link to="/provider/bookings" className="text-sm font-bold text-brand-primary hover:text-brand-secondary">
@@ -225,86 +225,87 @@ export function ProviderDashboardPage() {
             </Link>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-slate-200 text-left text-sm">
-              <thead className="bg-slate-50 text-xs font-bold uppercase text-slate-500">
-                <tr>
-                  <th className="px-4 py-3">Penyewa</th>
-                  <th className="px-4 py-3">Kos</th>
-                  <th className="px-4 py-3">Check-in</th>
-                  <th className="px-4 py-3">Total</th>
-                  <th className="px-4 py-3">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 bg-white">
-                {recentBookings.length > 0 ? (
-                  recentBookings.map((booking) => (
-                    <tr key={booking.id} className="align-top hover:bg-slate-50/70">
-                      <td className="px-4 py-3">
-                        <div className="font-semibold text-slate-900">{booking.tenantName ?? booking.tenantId}</div>
-                        <div className="text-xs text-slate-500">{booking.durationMonths} bulan</div>
-                      </td>
-                      <td className="px-4 py-3">
-                        <div className="font-semibold text-slate-900">{booking.listingName ?? booking.listingId}</div>
-                        <div className="text-xs text-slate-500">{booking.listingCity ?? '-'}</div>
-                      </td>
-                      <td className="px-4 py-3 text-slate-600">{formatDate(booking.checkInDate)}</td>
-                      <td className="px-4 py-3 font-bold text-brand-primary">{formatMoney(booking.totalPrice)}</td>
-                      <td className="px-4 py-3">
-                        <span
-                          className={[
-                            'inline-flex rounded-md px-2.5 py-1 text-xs font-bold ring-1',
-                            statusClasses[booking.status] ?? 'bg-slate-100 text-slate-600 ring-slate-200',
-                          ].join(' ')}
-                        >
-                          {booking.status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={5} className="px-4 py-10 text-center text-slate-500">
-                      {isLoading ? 'Memuat booking...' : 'Belum ada booking masuk.'}
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+          <div className="flex-1 min-h-0">
+            {recentBookings.length > 0 ? (
+              <div className="divide-y divide-slate-100">
+                {recentBookings.map((booking) => (
+                  <article key={booking.id} className="px-4 py-3 transition hover:bg-slate-50/60">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <h3 className="truncate text-sm font-bold text-slate-950">
+                            {booking.tenantName ?? booking.tenantId}
+                          </h3>
+                          <span
+                            className={[
+                              'inline-flex rounded-md px-2 py-1 text-[11px] font-bold ring-1',
+                              statusClasses[booking.status] ?? 'bg-slate-100 text-slate-600 ring-slate-200',
+                            ].join(' ')}
+                          >
+                            {booking.status}
+                          </span>
+                        </div>
+
+                        <p className="mt-1 truncate text-sm font-semibold text-slate-900">
+                          {booking.listingName ?? booking.listingId}
+                        </p>
+
+                        <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-500">
+                          <span>Check-in {formatDate(booking.checkInDate)}</span>
+                          <span>{booking.durationMonths} bulan</span>
+                          <span>{booking.listingCity ?? '-'}</span>
+                        </div>
+                      </div>
+
+                      <div className="shrink-0 text-right">
+                        <p className="text-sm font-black text-brand-primary">{formatMoney(booking.totalPrice)}</p>
+                        <p className="mt-1 text-xs text-slate-500">
+                          {booking.createdAt ? formatDate(booking.createdAt) : '-'}
+                        </p>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <div className="px-4 py-10 text-center text-sm text-slate-500">
+                {isLoading ? 'Memuat booking...' : 'Belum ada booking masuk.'}
+              </div>
+            )}
           </div>
         </section>
       </div>
 
       <section className="rounded-xl border border-slate-200 bg-white shadow-sm">
-        <div className="flex items-center justify-between gap-3 border-b border-slate-200 px-4 py-3">
-          <div>
-            <p className="text-xs font-semibold uppercase text-brand-primary">Inventory health</p>
-            <h2 className="text-base font-black text-slate-950">Produk kos terbaru</h2>
+          <div className="flex items-center justify-between gap-3 border-b border-slate-200 px-4 py-3">
+            <div>
+            <p className="text-xs font-semibold uppercase text-brand-primary">Ringkasan hunian</p>
+            <h2 className="text-base font-black text-slate-950">Hunian terbaru</h2>
           </div>
-          <Link to="/provider/kos" className="text-sm font-bold text-brand-primary hover:text-brand-secondary">
+          <Link to="/provider/hunian" className="text-sm font-bold text-brand-primary hover:text-brand-secondary">
             Lihat semua
           </Link>
         </div>
 
-        <div className="grid gap-4 p-4 xl:grid-cols-[220px_minmax(0,1fr)]">
+        <div className="grid gap-4 p-4 xl:grid-cols-[240px_minmax(0,1fr)]">
           <div className="grid grid-cols-2 gap-3 xl:grid-cols-1">
             <div className="rounded-lg border border-emerald-100 bg-emerald-50 p-3">
               <p className="text-2xl font-black text-brand-primary">{isLoading ? '...' : summary.availableListings}</p>
-              <p className="text-sm font-semibold text-slate-700">Kos tersedia</p>
+              <p className="text-sm font-semibold text-slate-700">Hunian tersedia</p>
             </div>
             <div className="rounded-lg border border-rose-100 bg-rose-50 p-3">
               <p className="text-2xl font-black text-rose-600">{isLoading ? '...' : summary.fullListings}</p>
-              <p className="text-sm font-semibold text-slate-700">Kos penuh</p>
+              <p className="text-sm font-semibold text-slate-700">Hunian penuh</p>
             </div>
           </div>
 
-          <div className="divide-y divide-slate-100 rounded-lg border border-slate-200">
+          <div className="min-w-0 divide-y divide-slate-100 rounded-lg border border-slate-200">
             {recentListings.length > 0 ? (
               recentListings.map((listing) => (
-                <article key={listing.id} className="flex items-center justify-between gap-4 px-4 py-3">
-                  <div className="min-w-0">
-                    <h3 className="line-clamp-1 break-words text-sm font-bold text-slate-950">{listing.name}</h3>
-                    <p className="mt-0.5 text-xs text-slate-500">
+                <article key={listing.id} className="flex items-start justify-between gap-4 px-4 py-3">
+                  <div className="min-w-0 flex-1">
+                    <h3 className="truncate text-sm font-bold text-slate-950">{listing.name}</h3>
+                    <p className="mt-0.5 truncate text-xs leading-5 text-slate-500">
                       {listing.city} / {listing.facilities.length} fasilitas
                     </p>
                   </div>
@@ -323,7 +324,7 @@ export function ProviderDashboardPage() {
               ))
             ) : (
               <div className="px-4 py-10 text-center text-sm text-slate-500">
-                {isLoading ? 'Memuat data kos...' : 'Belum ada kos yang didaftarkan.'}
+                {isLoading ? 'Memuat data hunian...' : 'Belum ada hunian yang didaftarkan.'}
               </div>
             )}
           </div>

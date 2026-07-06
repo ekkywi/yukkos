@@ -2,8 +2,8 @@ import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import Button from '../../components/ui/Button';
 
 const navigationItems = [
-  { to: '/provider/dashboard', label: 'Dashboard', meta: 'Ringkasan toko' },
-  { to: '/provider/kos', label: 'Produk Kos', meta: 'Inventaris' },
+  { to: '/provider/dashboard', label: 'Dashboard', meta: 'Ringkasan hunian' },
+  { to: '/provider/hunian', label: 'Hunian', meta: 'Daftar hunian' },
   { to: '/provider/bookings', label: 'Pesanan', meta: 'Booking masuk' },
 ];
 
@@ -26,8 +26,8 @@ export function ProviderLayout() {
 
   return (
     <main className="min-h-screen bg-[#f5f7f6] text-slate-900">
-      <div className="mx-auto grid min-h-screen max-w-[1600px] lg:grid-cols-[248px_minmax(0,1fr)]">
-        <aside className="border-r border-slate-200 bg-white px-4 py-4 lg:sticky lg:top-0 lg:h-screen">
+      <div className="mx-auto grid min-h-screen max-w-[1800px] lg:grid-cols-[272px_minmax(0,1fr)] 2xl:max-w-[1920px]">
+        <aside className="border-b border-slate-200 bg-white px-4 py-4 lg:sticky lg:top-0 lg:h-screen lg:border-b-0 lg:border-r">
           <button
             type="button"
             onClick={() => navigate('/provider/dashboard')}
@@ -38,20 +38,20 @@ export function ProviderLayout() {
             </div>
             <div className="min-w-0">
               <div className="truncate text-lg font-black tracking-tight text-brand-primary">
-                Yuk<span className="text-slate-900">Kos</span> Seller
+                Yuk<span className="text-slate-900">Kos</span> Provider
               </div>
-              <p className="truncate text-xs font-medium text-slate-500">Provider YukKos</p>
+              <p className="truncate text-xs font-medium text-slate-500">Akun Provider</p>
             </div>
           </button>
 
           <div className="mt-4 rounded-xl border border-emerald-100 bg-emerald-50 px-3 py-3">
             <div className="flex items-center justify-between gap-2">
-              <p className="text-sm font-bold text-slate-950">Status toko</p>
+              <p className="text-sm font-bold text-slate-950">Status akun</p>
               <span className="rounded-md bg-white px-2 py-1 text-xs font-bold text-brand-primary ring-1 ring-emerald-200">
-                Aktif
+                Akun aktif
               </span>
             </div>
-            <p className="mt-1 text-xs leading-5 text-slate-600">Kos Anda tampil di katalog publik.</p>
+            <p className="mt-1 text-xs leading-5 text-slate-600">Hunian Anda tampil di katalog publik.</p>
           </div>
 
           <nav className="mt-4 space-y-1.5">
@@ -68,10 +68,10 @@ export function ProviderLayout() {
 
           <div className="mt-4 grid gap-2">
             <Link
-              to="/provider/kos?create=1"
+              to="/provider/hunian?create=1"
               className="rounded-lg bg-brand-primary px-3 py-2.5 text-center text-sm font-bold text-white transition hover:bg-brand-secondary"
             >
-              Tambah Kos
+              Tambah Hunian
             </Link>
             <Link
               to="/"
@@ -93,9 +93,9 @@ export function ProviderLayout() {
           <header className="sticky top-0 z-20 border-b border-slate-200 bg-white">
             <div className="flex flex-col gap-3 px-4 py-3 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
               <div>
-                <p className="text-xs font-semibold uppercase text-brand-primary">YukKos Seller Center</p>
+                <p className="text-xs font-semibold uppercase text-brand-primary">Pusat Provider YukKos</p>
                 <h1 className="mt-1 text-lg font-bold tracking-tight text-slate-950">
-                  Kelola produk kos dan pesanan booking
+                  Kelola hunian dan pesanan booking
                 </h1>
               </div>
 
@@ -107,7 +107,7 @@ export function ProviderLayout() {
                   Katalog
                 </Link>
                 <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-700">
-                  Provider YukKos
+                  Portal Provider
                 </div>
                 <Button
                   type="button"
@@ -139,7 +139,7 @@ export function ProviderLayout() {
             </div>
           </header>
 
-          <section className="flex-1 px-4 py-4 sm:px-6 lg:px-8">
+          <section className="flex-1 px-4 py-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12">
             <Outlet />
           </section>
         </div>

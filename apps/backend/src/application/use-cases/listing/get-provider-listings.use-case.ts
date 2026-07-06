@@ -17,10 +17,13 @@ export class GetProviderListingsUseCase {
             id: listing.id,
             name: listing.name,
             city: listing.city,
+            description: listing.description,
             monthlyPrice: listing.monthlyPrice,
             status: listing.status,
             createdAt: listing.createdAt!,
+            images: listing.images || [],
             mainImage: listing.mainImage,
+            facilities: listing.facilities ?? [],
         }));
     }
 }

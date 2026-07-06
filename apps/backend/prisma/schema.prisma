@@ -55,6 +55,7 @@ model Listing {
   facilities   ListingFacility[]
   bookings     Booking[]
 
+  images       String[]        @default([])
   mainImage    String?
 
   createdAt    DateTime        @default(now())

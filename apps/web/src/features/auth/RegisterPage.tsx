@@ -70,7 +70,7 @@ function RegisterPage() {
               <span className="block truncate text-xl font-extrabold text-brand-primary">
                 Yuk<span className="text-slate-900">Kos</span>
               </span>
-              <span className="block truncate text-xs font-medium text-slate-500">Cari kos sesuai budget</span>
+              <span className="block truncate text-xs font-medium text-slate-500">Cari hunian sesuai budget</span>
             </span>
           </button>
 
@@ -94,13 +94,13 @@ function RegisterPage() {
             Akun tenant
           </div>
           <h1 className="mt-5 max-w-md text-3xl font-bold leading-tight text-slate-950">
-            Daftar YukKos untuk booking kos lebih cepat.
+            Daftar YukKos untuk booking hunian lebih cepat.
           </h1>
           <p className="mt-3 max-w-md text-sm leading-6 text-slate-600">
-            Buat akun tenant, cari kos favorit, lalu kirim booking ke pemilik kos.
+            Buat akun tenant, cari hunian favorit, lalu kirim booking ke pemiliknya.
           </p>
           <div className="mt-6 grid gap-3">
-            {['Akses katalog kos publik', 'Simpan data booking dari akun tenant', 'Pantau proses pengajuan sewa'].map((item) => (
+            {['Akses katalog hunian publik', 'Simpan data booking dari akun tenant', 'Pantau proses pengajuan sewa'].map((item) => (
               <div key={item} className="flex items-center gap-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5">
                 <span className="h-2.5 w-2.5 rounded-full bg-brand-primary" />
                 <span className="text-sm font-medium text-slate-700">{item}</span>
@@ -113,7 +113,7 @@ function RegisterPage() {
           <div>
             <p className="text-sm font-bold text-brand-primary">Registrasi akun</p>
             <h2 className="mt-2 text-2xl font-bold text-slate-950">Daftar YukKos</h2>
-            <p className="mt-2 text-sm leading-6 text-slate-600">Buat akun untuk booking kos lebih cepat.</p>
+            <p className="mt-2 text-sm leading-6 text-slate-600">Buat akun untuk booking hunian lebih cepat.</p>
           </div>
 
           {error ? (

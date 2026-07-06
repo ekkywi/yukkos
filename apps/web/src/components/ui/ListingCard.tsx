@@ -24,7 +24,7 @@ export const ListingCard: React.FC<ListingCardProps> = ({ listing, onClick }) =>
     maximumFractionDigits: 0,
   }).format(listing.monthlyPrice);
 
-  const fallbackImage = 'https://placehold.co/900x600/e2e8f0/64748b?text=Kos+Tanpa+Foto';
+  const fallbackImage = 'https://placehold.co/900x600/e2e8f0/64748b?text=Hunian+Tanpa+Foto';
   const status = statusMeta[listing.status] || {
     label: listing.status,
     className: 'bg-white text-slate-600 ring-slate-200',

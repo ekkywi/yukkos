@@ -38,6 +38,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     response.status(status).json({
       success: false,
       statusCode: status,
+      message: typeof errorMessage === 'string' ? errorMessage : (errorMessage as any).message || errorMessage,
       error: typeof errorMessage === 'string' ? errorMessage : (errorMessage as any).message || errorMessage,
       timestamp: new Date().toISOString(),
     });

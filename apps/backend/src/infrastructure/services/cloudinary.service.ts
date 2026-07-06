@@ -12,6 +12,10 @@ export class CloudinaryService implements IStorageService {
     const apiKey = this.configService.get<string>('CLOUDINARY_API_KEY');
     const apiSecret = this.configService.get<string>('CLOUDINARY_API_SECRET');
 
+    if (!cloudName || !apiKey || !apiSecret) {
+      throw new InternalServerErrorException('Konfigurasi Cloudinary belum lengkap. Periksa variabel CLOUDINARY_* di backend.');
+    }
+
     cloudinary.config({
       cloud_name: cloudName,
       api_key: apiKey,
@@ -24,12 +28,11 @@ export class CloudinaryService implements IStorageService {
       const uploadStream = cloudinary.uploader.upload_stream(
         { 
           folder: 'yukkos_media',
-          allowed_formats: ['jpg', 'png', 'jpeg', 'webp'] 
         },
         (error, result) => {
           if (error) {
             console.error('Cloudinary Upload Error:', error);
-            return reject(new InternalServerErrorException('Gagal mengunggah gambar ke server cloud.'));
+            return reject(new InternalServerErrorException(error.message || 'Gagal mengunggah gambar ke server cloud.'));
           }
           if (!result) {
             return reject(new InternalServerErrorException('Respons cloud tidak valid.'));

@@ -21,6 +21,18 @@ type ListingModelWithType = Prisma.ListingGetPayload<{
   };
 }>;
 
+const normalizeImageUrls = (images?: string[] | null, mainImage?: string | null) => {
+  const normalizedImages = Array.isArray(images)
+    ? images.filter((image): image is string => typeof image === 'string' && image.length > 0)
+    : [];
+
+  if (mainImage && !normalizedImages.includes(mainImage)) {
+    normalizedImages.unshift(mainImage);
+  }
+
+  return Array.from(new Set(normalizedImages));
+};
+
 @Injectable()
 export class PrismaListingRepository implements IListingRepository {
   constructor(private readonly prisma: PrismaService) {}
@@ -37,6 +49,7 @@ export class PrismaListingRepository implements IListingRepository {
           description: data.description,
           type: data.type as any,
           status: data.status as PrismaStatusListing,
+          images: normalizeImageUrls(data.images, data.mainImage),
           mainImage: data.mainImage,
           facilities: {
             create: data.facilityIds?.map(facilityId => ({
@@ -71,6 +84,7 @@ export class PrismaListingRepository implements IListingRepository {
         model.type as TypeListing,
         model.status as StatusListing,
         facilityNames,
+        model.images,
         model.mainImage,
         model.provider?.name ?? null,
         model.createdAt,
@@ -95,27 +109,30 @@ export class PrismaListingRepository implements IListingRepository {
   async update(id: string, providerId: string, data: UpdateListingPayload): Promise<ListingEntity> {
     try {
       const existing = await this.prisma.listing.findUnique({ where: { id } });
-        if (!existing || existing.providerId !== providerId) {
-          throw new ListingNotFoundError('Data kos tidak ditemukan atau Anda tidak memiliki hak akses.');
-        }
+      if (!existing || existing.providerId !== providerId) {
+        throw new ListingNotFoundError('Data hunian tidak ditemukan atau Anda tidak memiliki hak akses.');
+      }
 
-        const facilitiesUpdate = data.facilityIds ? {
-          deleteMany: {},
-          create: data.facilityIds.map(facilityId => ({
-            facility: { connect: { id: facilityId } }
-          }))
-        } : undefined;
+      const facilitiesUpdate = data.facilityIds
+        ? {
+            deleteMany: {},
+            create: data.facilityIds.map((facilityId) => ({
+              facility: { connect: { id: facilityId } },
+            })),
+          }
+        : undefined;
 
-        const model = await this.prisma.listing.update({
-          where: { id },
-          data: {
-            name: data.name,
-            city: data.city,
-            fullAddress: data.fullAddress,
-            monthlyPrice: data.monthlyPrice,
-            description: data.description,
-            type: data.type as any,
-            status: data.status as PrismaStatusListing,
+      const model = await this.prisma.listing.update({
+        where: { id },
+        data: {
+          name: data.name,
+          city: data.city,
+          fullAddress: data.fullAddress,
+          monthlyPrice: data.monthlyPrice,
+          description: data.description,
+          type: data.type as any,
+          status: data.status as PrismaStatusListing,
+          images: data.images !== undefined ? normalizeImageUrls(data.images, data.mainImage) : undefined,
           mainImage: data.mainImage,
           facilities: facilitiesUpdate,
         } as any,
@@ -126,48 +143,49 @@ export class PrismaListingRepository implements IListingRepository {
               name: true,
             },
           },
-        }
+        },
       }) as ListingModelWithType;
 
-        const facilityNames = model.facilities.map(f => f.facility.name);
+      const facilityNames = model.facilities.map((f) => f.facility.name);
 
-        return new ListingEntity(
-          model.id, 
-          model.providerId, 
-          model.name, 
-          model.city, 
-          model.fullAddress,
-          model.monthlyPrice, 
-          model.description, 
-          model.type as TypeListing,
-          model.status as StatusListing,
-          facilityNames, 
-          model.mainImage,
-          model.provider?.name ?? null,
-          model.createdAt, 
-          model.updatedAt
-        );
-      } catch (error: any) {
-        if (error instanceof ListingNotFoundError) throw error;
-        if (error?.code === 'P2003' || error?.code === 'P2025') {
-          throw new RelationalConstraintError('Fasilitas yang dipilih tidak valid.');
-        }
-        throw new DatabaseOperationError('Gagal memperbarui data kos.');
+      return new ListingEntity(
+        model.id,
+        model.providerId,
+        model.name,
+        model.city,
+        model.fullAddress,
+        model.monthlyPrice,
+        model.description,
+        model.type as TypeListing,
+        model.status as StatusListing,
+        facilityNames,
+        model.images,
+        model.mainImage,
+        model.provider?.name ?? null,
+        model.createdAt,
+        model.updatedAt
+      );
+    } catch (error: any) {
+      if (error instanceof ListingNotFoundError) throw error;
+      if (error?.code === 'P2003' || error?.code === 'P2025') {
+        throw new RelationalConstraintError('Fasilitas yang dipilih tidak valid.');
       }
+      throw new DatabaseOperationError('Gagal memperbarui data hunian.');
+    }
   }
 
   async delete(id: string, providerId: string): Promise<boolean> {
     try {
       const existing = await this.prisma.listing.findUnique({ where: { id } });
       if (!existing || existing.providerId !== providerId) {
-        throw new ListingNotFoundError('Data kos tidak ditemukan atau Anda tidak memiliki hak akses.')
+        throw new ListingNotFoundError('Data hunian tidak ditemukan atau Anda tidak memiliki hak akses.')
       }
 
       await this.prisma.listing.delete({ where: { id } });
       return true;
     } catch (error: any) {
       if (error instanceof ListingNotFoundError) throw error;
-      throw new DatabaseOperationError('Gagal menghapus data kos.');
+      throw new DatabaseOperationError('Gagal menghapus data hunian.');
     }
   }
 
@@ -190,16 +208,17 @@ export class PrismaListingRepository implements IListingRepository {
     return models.map((model) => {
       const facilityNames = model.facilities.map((f) => f.facility.name);
       return new ListingEntity(
-        model.id,
-        model.providerId,
-        model.name,
-        model.city,
+        model.id, 
+        model.providerId, 
+        model.name, 
+        model.city, 
         model.fullAddress,
         model.monthlyPrice,
-        model.description,
+        model.description, 
         model.type as TypeListing,
         model.status as StatusListing,
-        facilityNames,
+        facilityNames, 
+        model.images,
         model.mainImage,
         model.provider?.name ?? null,
         model.createdAt,
@@ -240,6 +259,7 @@ export class PrismaListingRepository implements IListingRepository {
       model.type as TypeListing,
       model.status as StatusListing,
       facilityNames,
+      model.images,
       model.mainImage,
       model.provider?.name ?? null,
       model.createdAt,
@@ -279,6 +299,7 @@ export class PrismaListingRepository implements IListingRepository {
         model.type as TypeListing,
         model.status as StatusListing,
         facilityNames,
+        model.images,
         model.mainImage,
         model.provider?.name ?? null,
         model.createdAt,
@@ -319,6 +340,7 @@ export class PrismaListingRepository implements IListingRepository {
       model.type as TypeListing,
       model.status as StatusListing,
       facilityNames,
+      model.images,
       model.mainImage,
       model.provider?.name ?? null,
       model.createdAt,

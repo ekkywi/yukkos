@@ -3,7 +3,7 @@ import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { GetMobileListingsUseCase } from '../../application/use-cases/listing/get-mobile-listings.use-case';
 import { GetMobileListingDetailUseCase } from '../../application/use-cases/listing/get-mobile-listing-detail.use-case';
 
-@ApiTags('BFF Mobile - Katalog Kos Ringkas')
+@ApiTags('BFF Mobile - Katalog Hunian Ringkas')
 @Controller('v1/mobile/listings')
 export class MobileListingController {
     constructor(
@@ -12,7 +12,7 @@ export class MobileListingController {
     ) {}
 
     @Get()
-    @ApiOperation({ summary: 'Mendapatkan daftar kos berformat ringkas untuk Mobile' })
+    @ApiOperation({ summary: 'Mendapatkan daftar hunian berformat ringkas untuk Mobile' })
     @ApiResponse({ status: 200, description: 'Berhasil mengambil data ringkas' })
     async findAll() {
         const data = await this.getMobileListingsUseCase.execute();
@@ -20,9 +20,9 @@ export class MobileListingController {
     }
 
     @Get(':id')
-    @ApiOperation({ summary: 'Mendapatkan detail spesifik kos untuk halaman mobile' })
-    @ApiResponse({ status: 200, description: 'Berhasil mendapatkan detail kos.' })
-    @ApiResponse({ status: 404, description: 'Kos tidak ditemukan.' })
+    @ApiOperation({ summary: 'Mendapatkan detail spesifik hunian untuk halaman mobile' })
+    @ApiResponse({ status: 200, description: 'Berhasil mendapatkan detail hunian.' })
+    @ApiResponse({ status: 404, description: 'Hunian tidak ditemukan.' })
     async findOne(@Param('id') id: string) {
         const data = await this.getMobileListingDetailUseCase.execute(id);
         return { success: true, data };

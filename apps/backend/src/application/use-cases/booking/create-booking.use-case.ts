@@ -19,11 +19,11 @@ export class CreateBookingUseCase {
     async execute(tenantId: string, dto: CreateBookingDto): Promise<BookingEntity> {
         const listing = await this.listingRepository.findById(dto.listingId);
         if (!listing) {
-            throw new NotFoundException('Data kos tidak ditemukan.');
+            throw new NotFoundException('Data hunian tidak ditemukan.');
         }
 
         if (listing.status !== StatusListing.AVAILABLE) {
-            throw new BadRequestException('Maaf, kos ini sedang tidak tersedia atau sudah penuh.');
+            throw new BadRequestException('Maaf, hunian ini sedang tidak tersedia atau sudah penuh.');
         }
 
         if (listing.providerId === tenantId) {

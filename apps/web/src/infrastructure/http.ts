@@ -22,6 +22,21 @@ httpClient.interceptors.request.use((config) => {
     }
   }
 
+  if (typeof FormData !== 'undefined' && config.data instanceof FormData && config.headers) {
+    const headers = config.headers as Record<string, unknown> & {
+      delete?: (name: string) => void;
+      set?: (name: string, value: string) => void;
+    };
+
+    if (typeof headers.delete === 'function') {
+      headers.delete('Content-Type');
+      headers.delete('content-type');
+    } else {
+      delete headers['Content-Type'];
+      delete headers['content-type'];
+    }
+  }
+
   return config;
 });
 

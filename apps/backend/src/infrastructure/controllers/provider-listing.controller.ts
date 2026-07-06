@@ -11,7 +11,7 @@ import { JwtAuthGuard } from '../security/jwt-auth.guard';
 import { RolesGuard } from '../security/roles.guard';
 import { Roles } from '../security/roles.decorator';
 
-@ApiTags('Provider - Manajemen Kos')
+@ApiTags('Provider - Manajemen Hunian')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles('PROVIDER')
@@ -26,7 +26,7 @@ export class ProviderListingController {
     ) {}
 
     @Get()
-    @ApiOperation({ summary: 'Mendapatkan seluruh daftar kos milik Provider (Dasbor)' })
+    @ApiOperation({ summary: 'Mendapatkan seluruh daftar hunian milik Provider (Dasbor)' })
     @ApiResponse({ status: 200, description: 'Berhasil mengambil daftar inventaris.' })
     async findAllMyListings(@Request() req: any) {
         const providerId = req.user?.sub;
@@ -37,8 +37,8 @@ export class ProviderListingController {
     }
 
     @Get(':id')
-    @ApiOperation({ summary: 'Mendapatkan detail spesifik kos milik Provider (Untuk Form Edit)' })
-    @ApiResponse({ status: 200, description: 'Berhasil mengambil detail kos.' })
+    @ApiOperation({ summary: 'Mendapatkan detail spesifik hunian milik Provider (Untuk Form Edit)' })
+    @ApiResponse({ status: 200, description: 'Berhasil mengambil detail hunian.' })
     async findOneMyListing(@Param('id') id: string, @Request() req: any) {
         const providerId = req.user?.sub;
         if (!providerId) throw new BadRequestException('Provider tidak terautentikasi');
@@ -48,8 +48,8 @@ export class ProviderListingController {
     }
 
     @Post()
-    @ApiOperation({ summary: 'Menambah data kos baru beserta fasilitasnya' })
-    @ApiResponse({ status: 201, description: 'Data kos berhasil dibuat.' })
+    @ApiOperation({ summary: 'Menambah data hunian baru beserta fasilitasnya' })
+    @ApiResponse({ status: 201, description: 'Data hunian berhasil dibuat.' })
     @ApiResponse({ status: 403, description: 'Akses ditolak (Bukan Provider).' })
     async create(@Body() dto: CreateListingDto, @Request() req: any) {
         const providerId = req.user?.sub;
@@ -63,8 +63,8 @@ export class ProviderListingController {
     }
 
     @Put(':id')
-    @ApiOperation({ summary: 'Memperbarui data kos (hanya properti milik sendiri)' })
-    @ApiResponse({ status:200, description: 'Data kos berhasil diperbarui.' })
+    @ApiOperation({ summary: 'Memperbarui data hunian (hanya properti milik sendiri)' })
+    @ApiResponse({ status:200, description: 'Data hunian berhasil diperbarui.' })
     async update(@Param('id') id: string, @Body() dto: UpdateListingDto, @Request() req: any) {
         const providerId = req.user?.sub;
         if(!providerId) throw new BadRequestException('Provider tidak terautentikasi');
@@ -74,13 +74,13 @@ export class ProviderListingController {
     }
 
     @Delete(':id')
-    @ApiOperation({ summary: 'Menghapus data kos secara permanen' })
-    @ApiResponse({ status: 200, description: 'Data kos berhasil dihapus.' })
+    @ApiOperation({ summary: 'Menghapus data hunian secara permanen' })
+    @ApiResponse({ status: 200, description: 'Data hunian berhasil dihapus.' })
     async remove(@Param('id') id: string, @Request() req: any) {
         const providerId = req.user?.sub;
         if (!providerId) throw new BadRequestException('Provider tidak terautentikasi');
 
         await this.deleteListingUseCase.execute(id, providerId);
-        return { success: true, message: 'Data kos berhasil dihapus.'}
+        return { success: true, message: 'Data hunian berhasil dihapus.'}
     }
 }

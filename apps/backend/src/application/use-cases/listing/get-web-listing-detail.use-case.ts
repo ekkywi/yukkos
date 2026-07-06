@@ -15,7 +15,7 @@ export class GetWebListingDetailUseCase {
         const listing = await this.listingRepository.findById(id);
 
         if (!listing) {
-            throw new ListingNotFoundError(`Kos dengan ID ${id} tidak ditemukan.`);
+            throw new ListingNotFoundError(`Hunian dengan ID ${id} tidak ditemukan.`);
         }
 
         return {
@@ -29,6 +29,7 @@ export class GetWebListingDetailUseCase {
             description: listing.description,
             status: listing.status,
             mainImage: listing.mainImage,
+            images: listing.images || [],
             facilities: listing.facilities || [],
         };
     }

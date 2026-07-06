@@ -21,6 +21,7 @@ export class ListingEntity {
     public readonly type: TypeListing,
     public readonly status: StatusListing,
     public readonly facilities: string[],
+    public readonly images: string[],
     public readonly mainImage: string | null,
     public readonly providerName?: string | null,
     public readonly createdAt?: Date,

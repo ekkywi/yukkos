@@ -7,5 +7,6 @@ export class MobileListingDetailResponseDto {
     description!: string;
     status!: string;
     mainImage!: string | null;
+    images!: string[];
     facilities!: string[];
 }

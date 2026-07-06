@@ -3,7 +3,7 @@ import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { GetWebListingDetailUseCase } from '../../application/use-cases/listing/get-web-listing-detail.use-case';
 import { GetWebListingsUseCase } from '../../application/use-cases/listing/get-web-listings.use-case';
 
-@ApiTags('BFF Web - Katalog Kos Detail')
+@ApiTags('BFF Web - Katalog Hunian Detail')
 @Controller('v1/web/listings')
 export class WebListingController {
     constructor(
@@ -12,17 +12,17 @@ export class WebListingController {
     ) {}
 
     @Get()
-    @ApiOperation({ summary: 'Mendapatkan daftar kos untuk beranda Web (dengan snippet)' })
-    @ApiResponse({ status: 200, description: 'Berhasil mengambil daftar kos web.' })
+    @ApiOperation({ summary: 'Mendapatkan daftar hunian untuk beranda Web (dengan snippet)' })
+    @ApiResponse({ status: 200, description: 'Berhasil mengambil daftar hunian web.' })
     async findAll() {
         const data = await this.getWebListingUseCase.execute()
         return { execute: true, count: data.length, data };
     }
 
     @Get(':id')
-    @ApiOperation({ summary: 'Mendapatkan detail lengkap satu kos untuk halaman Web' })
-    @ApiResponse({ status: 200, description: 'Berhasil mengambil detail kos.' })
-    @ApiResponse({ status: 404, description: 'Kos tidak ditemukan.'})
+    @ApiOperation({ summary: 'Mendapatkan detail lengkap satu hunian untuk halaman Web' })
+    @ApiResponse({ status: 200, description: 'Berhasil mengambil detail hunian.' })
+    @ApiResponse({ status: 404, description: 'Hunian tidak ditemukan.'})
     async findOne(@Param('id') id: string) {
         const data = await this.getWebListingDetailUseCase.execute(id);
         return { success: true, data };

@@ -13,7 +13,7 @@ export class DatabaseOperationError extends Error {
 }
 
 export class ListingNotFoundError extends Error {
-    constructor(message: string = 'Data kos tidak ditemukan.') {
+    constructor(message: string = 'Data hunian tidak ditemukan.') {
         super(message);
         this.name = 'ListingNotFoundError';
     }

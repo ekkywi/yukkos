@@ -15,7 +15,7 @@ export class GetMobileListingDetailUseCase {
         const listing = await this.listingRepository.findById(id);
 
         if (!listing) {
-            throw new ListingNotFoundError(`Data kos dengan ID ${id} tidak ditemukan.`);
+            throw new ListingNotFoundError(`Data hunian dengan ID ${id} tidak ditemukan.`);
         }
 
         return {
@@ -28,6 +28,7 @@ export class GetMobileListingDetailUseCase {
             status: listing.status,
             facilities: listing.facilities || [],
             mainImage: listing.mainImage,
+            images: listing.images || [],
         };
     }
 }

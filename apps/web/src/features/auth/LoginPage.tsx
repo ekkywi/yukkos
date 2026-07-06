@@ -76,7 +76,7 @@ function LoginPage() {
               <span className="block truncate text-xl font-extrabold text-brand-primary">
                 Yuk<span className="text-slate-900">Kos</span>
               </span>
-              <span className="block truncate text-xs font-medium text-slate-500">Cari kos sesuai budget</span>
+              <span className="block truncate text-xs font-medium text-slate-500">Cari hunian sesuai budget</span>
             </span>
           </button>
 
@@ -100,13 +100,13 @@ function LoginPage() {
             YukKos
           </div>
           <h1 className="mt-5 max-w-md text-3xl font-bold leading-tight text-slate-950">
-            Masuk dan lanjut cari kos sesuai budget.
+            Masuk dan lanjut cari hunian sesuai budget.
           </h1>
           <p className="mt-3 max-w-md text-sm leading-6 text-slate-600">
-            Kelola pencarian, booking kos, dan status pengajuan dari satu akun.
+            Kelola pencarian, booking hunian, dan status pengajuan dari satu akun.
           </p>
           <div className="mt-6 grid gap-3">
-            {['Cari kos berdasarkan kota dan harga', 'Booking kos lebih cepat', 'Pantau status pengajuan'].map((item) => (
+            {['Cari hunian berdasarkan kota dan harga', 'Booking hunian lebih cepat', 'Pantau status pengajuan'].map((item) => (
               <div key={item} className="flex items-center gap-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5">
                 <span className="h-2.5 w-2.5 rounded-full bg-brand-primary" />
                 <span className="text-sm font-medium text-slate-700">{item}</span>
@@ -119,7 +119,7 @@ function LoginPage() {
           <div>
             <p className="text-sm font-bold text-brand-primary">Masuk akun</p>
             <h2 className="mt-2 text-2xl font-bold text-slate-950">Masuk ke YukKos</h2>
-            <p className="mt-2 text-sm leading-6 text-slate-600">Lanjut cari kos sesuai budget.</p>
+            <p className="mt-2 text-sm leading-6 text-slate-600">Lanjut cari hunian sesuai budget.</p>
           </div>
 
           {error ? (

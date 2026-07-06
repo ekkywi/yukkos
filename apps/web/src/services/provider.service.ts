@@ -5,6 +5,11 @@ export type ProviderListingStatus = 'AVAILABLE' | 'FULL';
 export type ProviderListingType = 'MALE' | 'FEMALE' | 'MIXED';
 export type ProviderBookingStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'CANCELLED';
 
+export type ProviderFacility = {
+  id: number;
+  name: string;
+};
+
 export type ProviderListing = {
   id: string;
   name: string;
@@ -15,6 +20,7 @@ export type ProviderListing = {
   type: ProviderListingType;
   status: ProviderListingStatus;
   facilities: string[];
+  images: string[];
   mainImage: string | null;
   createdAt?: string;
   updatedAt?: string;
@@ -44,6 +50,7 @@ export type ProviderListingInput = {
   type: ProviderListingType;
   status?: ProviderListingStatus;
   facilityIds?: number[];
+  images?: string[];
   mainImage?: string;
 };
 
@@ -101,6 +108,24 @@ const normalizeBookingStatus = (value: unknown): ProviderBookingStatus => {
   return 'PENDING';
 };
 
+const normalizeFacility = (value: unknown): ProviderFacility | null => {
+  if (!isRecord(value)) {
+    return null;
+  }
+
+  const id = typeof value.id === 'number' && Number.isFinite(value.id) ? value.id : Number(value.id);
+  const name = toText(value.name);
+
+  if (!Number.isFinite(id) || id <= 0 || !name) {
+    return null;
+  }
+
+  return {
+    id,
+    name,
+  };
+};
+
 const normalizeListing = (value: unknown): ProviderListing | null => {
   if (!isRecord(value)) {
     return null;
@@ -114,7 +139,7 @@ const normalizeListing = (value: unknown): ProviderListing | null => {
 
   return {
     id,
-    name: toText(value.name, 'Kos tanpa nama'),
+    name: toText(value.name, 'Hunian tanpa nama'),
     city: toText(value.city, 'Lokasi belum tersedia'),
     fullAddress: toText(value.fullAddress, ''),
     monthlyPrice: toNumber(value.monthlyPrice),
@@ -123,6 +148,17 @@ const normalizeListing = (value: unknown): ProviderListing | null => {
     status: normalizeListingStatus(value.status),
     facilities: Array.isArray(value.facilities) ? value.facilities.filter((facility) => typeof facility === 'string') : [],
     mainImage: typeof value.mainImage === 'string' && value.mainImage.length > 0 ? value.mainImage : null,
+    images: (() => {
+      const images = Array.isArray(value.images)
+        ? value.images.filter((image) => typeof image === 'string' && image.length > 0)
+        : [];
+
+      if (images.length > 0) {
+        return images;
+      }
+
+      return typeof value.mainImage === 'string' && value.mainImage.length > 0 ? [value.mainImage] : [];
+    })(),
     createdAt: typeof value.createdAt === 'string' ? value.createdAt : undefined,
     updatedAt: typeof value.updatedAt === 'string' ? value.updatedAt : undefined,
   };
@@ -168,18 +204,30 @@ const unwrapSingle = (payload: unknown) => {
 };
 
 const extractErrorMessage = (error: unknown, fallback: string) => {
+  const readMessage = (value: unknown): string | null => {
+    if (typeof value === 'string' && value.trim()) {
+      return value;
+    }
+
+    if (Array.isArray(value) && value.every((entry) => typeof entry === 'string')) {
+      return value.join(', ');
+    }
+
+    if (isRecord(value)) {
+      return readMessage(value.message) ?? readMessage(value.error);
+    }
+
+    return null;
+  };
+
   if (axios.isAxiosError(error)) {
     const responseData = error.response?.data;
 
     if (isRecord(responseData)) {
-      const message = responseData.message;
+      const message = readMessage(responseData.message) ?? readMessage(responseData.error);
 
-      if (typeof message === 'string') {
+      if (message) {
         return message;
-      }
-
-      if (Array.isArray(message) && message.every((entry) => typeof entry === 'string')) {
-        return message.join(', ');
       }
     }
 
@@ -196,6 +244,38 @@ const extractErrorMessage = (error: unknown, fallback: string) => {
 };
 
 export const ProviderAPI = {
+  getFacilities: async (): Promise<ProviderFacility[]> => {
+    try {
+      const response = await httpClient.get('/v1/facilities');
+      const payload = unwrapSingle(response?.data);
+
+      return unwrapData(payload)
+        .map(normalizeFacility)
+        .filter((facility): facility is ProviderFacility => facility !== null);
+    } catch (error) {
+      throw new Error(extractErrorMessage(error, 'Gagal memuat daftar fasilitas.'), { cause: error });
+    }
+  },
+
+  uploadListingImage: async (file: File): Promise<string> => {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await httpClient.post('/v1/media/upload', formData);
+
+      const payload = unwrapSingle(response?.data);
+
+      if (!isRecord(payload) || typeof payload.url !== 'string' || !payload.url) {
+        throw new Error('Respons upload gambar tidak valid.');
+      }
+
+      return payload.url;
+    } catch (error) {
+      throw new Error(extractErrorMessage(error, 'Gagal mengunggah gambar.'), { cause: error });
+    }
+  },
+
   getListings: async (): Promise<ProviderListing[]> => {
     try {
       const response = await httpClient.get('/v1/provider/listings');
@@ -205,7 +285,22 @@ export const ProviderAPI = {
         .map(normalizeListing)
         .filter((listing): listing is ProviderListing => listing !== null);
     } catch (error) {
-      throw new Error(extractErrorMessage(error, 'Gagal memuat data kos provider.'));
+      throw new Error(extractErrorMessage(error, 'Gagal memuat data hunian provider.'), { cause: error });
+    }
+  },
+
+  getListingDetail: async (id: string): Promise<ProviderListing> => {
+    try {
+      const response = await httpClient.get(`/v1/provider/listings/${id}`);
+      const data = normalizeListing(unwrapSingle(response?.data));
+
+      if (!data) {
+        throw new Error('Respons detail hunian tidak valid.');
+      }
+
+      return data;
+    } catch (error) {
+      throw new Error(extractErrorMessage(error, 'Gagal memuat detail hunian.'), { cause: error });
     }
   },
 
@@ -215,12 +310,12 @@ export const ProviderAPI = {
       const data = normalizeListing(unwrapSingle(response?.data));
 
       if (!data) {
-        throw new Error('Respons create kos tidak valid.');
+        throw new Error('Respons create hunian tidak valid.');
       }
 
       return data;
     } catch (error) {
-      throw new Error(extractErrorMessage(error, 'Gagal membuat data kos.'));
+      throw new Error(extractErrorMessage(error, 'Gagal membuat data hunian.'), { cause: error });
     }
   },
 
@@ -230,12 +325,12 @@ export const ProviderAPI = {
       const data = normalizeListing(unwrapSingle(response?.data));
 
       if (!data) {
-        throw new Error('Respons update kos tidak valid.');
+        throw new Error('Respons update hunian tidak valid.');
       }
 
       return data;
     } catch (error) {
-      throw new Error(extractErrorMessage(error, 'Gagal memperbarui data kos.'));
+      throw new Error(extractErrorMessage(error, 'Gagal memperbarui data hunian.'), { cause: error });
     }
   },
 
@@ -243,7 +338,7 @@ export const ProviderAPI = {
     try {
       await httpClient.delete(`/v1/provider/listings/${id}`);
     } catch (error) {
-      throw new Error(extractErrorMessage(error, 'Gagal menghapus data kos.'));
+      throw new Error(extractErrorMessage(error, 'Gagal menghapus data hunian.'), { cause: error });
     }
   },
 
@@ -256,7 +351,7 @@ export const ProviderAPI = {
         .map(normalizeBooking)
         .filter((booking): booking is ProviderBooking => booking !== null);
     } catch (error) {
-      throw new Error(extractErrorMessage(error, 'Gagal memuat booking provider.'));
+      throw new Error(extractErrorMessage(error, 'Gagal memuat booking provider.'), { cause: error });
     }
   },
 
@@ -274,7 +369,7 @@ export const ProviderAPI = {
 
       return data;
     } catch (error) {
-      throw new Error(extractErrorMessage(error, 'Gagal memperbarui status booking.'));
+      throw new Error(extractErrorMessage(error, 'Gagal memperbarui status booking.'), { cause: error });
     }
   },
 };

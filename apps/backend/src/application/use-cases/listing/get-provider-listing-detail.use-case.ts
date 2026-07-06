@@ -15,7 +15,7 @@ export class GetProviderListingDetailUseCase {
         const listing = await this.listingRepository.findByIdAndProviderId(id, providerId);
 
         if (!listing) {
-            throw new ListingNotFoundError(`Data kos tidak ditemukan atau Anda tidak memiliki akses.`);
+            throw new ListingNotFoundError(`Data hunian tidak ditemukan atau Anda tidak memiliki akses.`);
         }
 
         return listing;

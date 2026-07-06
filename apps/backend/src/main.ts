@@ -17,8 +17,8 @@ async function bootstrap() {
   app.useGlobalFilters(new GlobalExceptionFilter());
 
   const config = new DocumentBuilder()
-    .setTitle('API Kos Lintas Platform')
-    .setDescription('Dokumentasi backend untuk aplikasi kos (MVP)')
+    .setTitle('API Hunian Lintas Platform')
+    .setDescription('Dokumentasi backend untuk aplikasi hunian (MVP)')
     .setVersion('1.0')
     .addBearerAuth()
     .build();

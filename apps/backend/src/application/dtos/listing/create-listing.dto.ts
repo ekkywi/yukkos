@@ -3,7 +3,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { StatusListing, TypeListing } from '../../../domain/entities/listing.entity';
 
 export class CreateListingDto {
-    @ApiProperty({ example: 'Kos Bintang Terang', description: 'Nama properti kos' })
+    @ApiProperty({ example: 'Hunian Bintang Terang', description: 'Nama properti hunian' })
     @IsNotEmpty()
     @IsString()
     name!: string;
@@ -24,12 +24,12 @@ export class CreateListingDto {
     @Min(0)
     monthlyPrice!: number;
 
-    @ApiProperty({ example: 'Kos nyaman, bersih, dan aman.', description: 'Deskirpsi fasilitas dan aturan' })
+    @ApiProperty({ example: 'Hunian nyaman, bersih, dan aman.', description: 'Deskirpsi fasilitas dan aturan' })
     @IsNotEmpty()
     @IsString()
     description!: string;
 
-    @ApiProperty({ enum: TypeListing, example: TypeListing.MIXED, description: 'Target penghuni kos' })
+    @ApiProperty({ enum: TypeListing, example: TypeListing.MIXED, description: 'Target penghuni hunian' })
     @IsNotEmpty()
     @IsEnum(TypeListing)
     type!: TypeListing;
@@ -49,4 +49,10 @@ export class CreateListingDto {
     @IsOptional()
     @IsString()
     mainImage?: string;
+
+    @ApiPropertyOptional({ type: [String], example: ['https://.../1.jpg', 'https://.../2.jpg'], description: 'Daftar URL gambar hunian dari Cloudinary' })
+    @IsOptional()
+    @IsArray()
+    @IsString({ each: true })
+    images?: string[];
 }

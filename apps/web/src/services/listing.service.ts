@@ -45,7 +45,7 @@ const normalizeListing = (value: unknown): WebListing | null => {
   }
 
   const id = toText(value.id);
-  const name = toText(value.name, 'Kos tanpa nama');
+  const name = toText(value.name, 'Hunian tanpa nama');
   const providerName = toText(value.providerName, '');
   const city = toText(value.city, 'Lokasi belum tersedia');
   const shortDescription =
@@ -92,7 +92,7 @@ const normalizeListingDetail = (value: unknown): WebListingDetail | null => {
 
   return {
     ...normalized,
-    images,
+    images: images.length > 0 ? images : normalized.mainImage ? [normalized.mainImage] : [],
     fullAddress: toText(value.fullAddress, ''),
     description: toText(value.description, ''),
     facilities,
@@ -158,13 +158,13 @@ export const ListingAPI = {
       const listing = normalizeListingDetail(rawData);
 
       if (!listing) {
-        throw new Error('Respons detail kos tidak valid.');
+        throw new Error('Respons detail hunian tidak valid.');
       }
 
       return listing;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 404) {
-        throw new Error('Kos tidak ditemukan.', { cause: error });
+        throw new Error('Hunian tidak ditemukan.', { cause: error });
       }
 
       if (axios.isAxiosError(error) && !error.response) {

@@ -24,7 +24,7 @@ export class MediaController {
   ) {}
 
   @Post('upload')
-  @ApiOperation({ summary: 'Mengunggah foto kos ke Cloudinary' })
+  @ApiOperation({ summary: 'Mengunggah foto hunian ke Cloudinary' })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     schema: {
@@ -43,6 +43,10 @@ export class MediaController {
   async uploadFile(@UploadedFile() file: Express.Multer.File) {
     if (!file) {
       throw new BadRequestException('Harap sertakan berkas gambar yang valid.');
+    }
+
+    if (!file.mimetype.startsWith('image/')) {
+      throw new BadRequestException('Harap unggah file gambar (JPG, PNG, WEBP, GIF) yang valid.');
     }
 
     const imageUrl = await this.storageService.uploadImage(file);

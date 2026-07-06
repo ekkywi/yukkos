@@ -78,7 +78,7 @@ export function ProviderBookingPage() {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 xl:space-y-5">
       <section className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
@@ -89,7 +89,7 @@ export function ProviderBookingPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-4 gap-2 rounded-xl border border-slate-200 bg-slate-50 p-2 text-center">
+          <div className="grid grid-cols-2 gap-2 rounded-xl border border-slate-200 bg-slate-50 p-2 text-center sm:grid-cols-4">
             {[
               { label: 'Total', value: summary.total, tone: 'text-slate-950' },
               { label: 'Pending', value: summary.pending, tone: 'text-amber-600' },
@@ -130,16 +130,16 @@ export function ProviderBookingPage() {
         </div>
 
         <div className="hidden overflow-x-auto lg:block">
-          <table className="min-w-full divide-y divide-slate-200 text-left text-sm">
+          <table className="min-w-[1180px] w-full table-fixed divide-y divide-slate-200 text-left text-sm">
             <thead className="bg-slate-50 text-xs font-bold uppercase text-slate-500">
               <tr>
-                <th className="px-4 py-3">Penyewa</th>
-                <th className="px-4 py-3">Kos</th>
-                <th className="px-4 py-3">Check-in</th>
-                <th className="px-4 py-3">Durasi</th>
-                <th className="px-4 py-3">Total</th>
-                <th className="px-4 py-3">Status</th>
-                <th className="px-4 py-3 text-right">Aksi</th>
+                <th className="w-[22%] whitespace-nowrap px-4 py-3">Penyewa</th>
+                <th className="w-[27%] whitespace-nowrap px-4 py-3">Hunian</th>
+                <th className="w-[13%] whitespace-nowrap px-4 py-3">Check-in</th>
+                <th className="w-[12%] whitespace-nowrap px-4 py-3">Durasi</th>
+                <th className="w-[14%] whitespace-nowrap px-4 py-3">Total</th>
+                <th className="w-[12%] whitespace-nowrap px-4 py-3">Status</th>
+                <th className="w-[10%] whitespace-nowrap px-4 py-3 text-right">Aksi</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -147,17 +147,17 @@ export function ProviderBookingPage() {
                 bookings.map((booking) => (
                   <tr key={booking.id} className="align-top hover:bg-slate-50/70">
                     <td className="px-4 py-3">
-                      <p className="font-bold text-slate-950">{booking.tenantName ?? booking.tenantId}</p>
+                      <p className="truncate font-bold text-slate-950">{booking.tenantName ?? booking.tenantId}</p>
                       <p className="mt-1 text-xs text-slate-500">{formatDate(booking.createdAt)}</p>
                     </td>
                     <td className="px-4 py-3">
-                      <p className="font-semibold text-slate-900">{booking.listingName ?? booking.listingId}</p>
-                      <p className="mt-1 text-xs text-slate-500">{booking.listingCity ?? '-'}</p>
+                      <p className="truncate font-semibold text-slate-900">{booking.listingName ?? booking.listingId}</p>
+                      <p className="mt-1 truncate text-xs text-slate-500">{booking.listingCity ?? '-'}</p>
                     </td>
-                    <td className="px-4 py-3 text-slate-600">{formatDate(booking.checkInDate)}</td>
-                    <td className="px-4 py-3 text-slate-600">{booking.durationMonths} bulan</td>
-                    <td className="px-4 py-3 font-black text-brand-primary">{formatMoney(booking.totalPrice)}</td>
-                    <td className="px-4 py-3">
+                    <td className="whitespace-nowrap px-4 py-3 text-slate-600">{formatDate(booking.checkInDate)}</td>
+                    <td className="whitespace-nowrap px-4 py-3 text-slate-600">{booking.durationMonths} bulan</td>
+                    <td className="whitespace-nowrap px-4 py-3 font-black text-brand-primary">{formatMoney(booking.totalPrice)}</td>
+                    <td className="whitespace-nowrap px-4 py-3">
                       <span
                         className={[
                           'rounded-md px-2.5 py-1 text-xs font-bold ring-1',
@@ -215,7 +215,7 @@ export function ProviderBookingPage() {
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
-                      <h3 className="break-words text-sm font-bold text-slate-950">
+                      <h3 className="line-clamp-2 break-words text-sm font-bold text-slate-950">
                         {booking.tenantName ?? booking.tenantId}
                       </h3>
                       <span
@@ -227,7 +227,7 @@ export function ProviderBookingPage() {
                         {booking.status}
                       </span>
                     </div>
-                    <p className="mt-1 text-sm text-slate-600">{booking.listingName ?? booking.listingId}</p>
+                    <p className="mt-1 line-clamp-1 text-sm text-slate-600">{booking.listingName ?? booking.listingId}</p>
                     <p className="mt-1 text-xs text-slate-500">
                       Check-in {formatDate(booking.checkInDate)} / {booking.durationMonths} bulan
                     </p>

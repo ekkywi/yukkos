@@ -22,6 +22,7 @@ export class CreateListingUseCase {
       type: dto.type,
       status: StatusListing.AVAILABLE,
       facilityIds: dto.facilityIds || [],
+      images: dto.images || [],
       mainImage: dto.mainImage || null,
     });
   }

@@ -9,5 +9,6 @@ export class WebListingDetailResponseDto {
     description!: string;
     status!: string;
     mainImage!: string | null;
+    images!: string[];
     facilities!: string[];
 }

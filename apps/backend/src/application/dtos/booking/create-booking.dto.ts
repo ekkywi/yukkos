@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsNotEmpty, IsNumber, IsDateString, Min } from 'class-validator';
 
 export class CreateBookingDto {
-  @ApiProperty({ description: 'ID Kos yang ingin disewa' })
+  @ApiProperty({ description: 'ID hunian yang ingin disewa' })
   @IsString()
   @IsNotEmpty()
   listingId!: string;

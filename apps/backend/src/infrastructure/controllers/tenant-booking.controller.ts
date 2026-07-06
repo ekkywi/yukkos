@@ -5,7 +5,7 @@ import { GetTenantBookingsUseCase } from '../../application/use-cases/booking/ge
 import { CreateBookingDto } from '../../application/dtos/booking/create-booking.dto';
 import { JwtAuthGuard } from '../security/jwt-auth.guard';
 
-@ApiTags('Tenant - Pemesanan Kos')
+@ApiTags('Tenant - Pemesanan Hunian')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller('v1/tenant/bookings')
@@ -16,10 +16,10 @@ export class TenantBookingController {
 ) {}
 
   @Post()
-  @ApiOperation({ summary: 'Mengajukan pemesanan kos baru' })
+  @ApiOperation({ summary: 'Mengajukan pemesanan hunian baru' })
   @ApiResponse({ status: 201, description: 'Pengajuan sewa berhasil dibuat.' })
-  @ApiResponse({ status: 400, description: 'Kos tidak tersedia atau data tidak valid.' })
-  @ApiResponse({ status: 404, description: 'Kos tidak ditemukan.' })
+  @ApiResponse({ status: 400, description: 'Hunian tidak tersedia atau data tidak valid.' })
+  @ApiResponse({ status: 404, description: 'Hunian tidak ditemukan.' })
   async create(@Body() dto: CreateBookingDto, @Request() req: any) {
     const tenantId = req.user?.sub;
     if (!tenantId) {
@@ -36,7 +36,7 @@ export class TenantBookingController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Melihat riwayat pengajuan sewa kos saya' })
+  @ApiOperation({ summary: 'Melihat riwayat pengajuan sewa hunian saya' })
   @ApiResponse({ status: 200, description: 'Berhasil mengambil data riwayat.' })
   async getMyBookings(@Request() req: any) {
     const tenantId = req.user?.sub;
